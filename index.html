@@ -45,6 +45,11 @@ body.leaderboard-hover footer,
 body.leaderboard-hover .fab-group {
   filter: blur(4px);
 }
+body.past-editions-active .hero-section,
+body.past-editions-active .main,
+body.past-editions-active footer {
+  filter: blur(4px);
+}
 
 /* HERO — full viewport */
 .hero-section {
@@ -283,6 +288,7 @@ body.leaderboard-hover .fab-group {
   color: var(--text);
   text-align: left;
   display: -webkit-box;
+  line-clamp: 5;
   -webkit-line-clamp: 5;
   -webkit-box-orient: vertical;
   overflow: hidden;
@@ -307,6 +313,34 @@ body.leaderboard-hover .fab-group {
   border-right: 0.5px solid var(--surface);
   box-shadow: none;
 }
+.edition-tab.game-tab {
+  color: #fff;
+}
+.edition-tab.game-tab .edition-tab-tag,
+.edition-tab.game-tab .edition-tab-author,
+.edition-tab.game-tab .edition-tab-title {
+  color: #fff;
+}
+.edition-tab.game-wordle { background: #4A80D9; }
+.edition-tab.game-connections { background: var(--purple); }
+.edition-tab.game-strands { background: #2A9D8F; }
+.edition-tab.game-tab:hover:not(.active) {
+  filter: none;
+}
+.edition-tab.game-wordle:hover:not(.active) {
+  background: #3666b7;
+}
+.edition-tab.game-connections:hover:not(.active) {
+  background: #5f42ad;
+}
+.edition-tab.game-strands:hover:not(.active) {
+  background: #1f7e72;
+}
+.edition-tab.game-tab.active {
+  color: #fff;
+  border-right: none;
+  box-shadow: inset 0 0 0 2px rgba(255,255,255,0.28);
+}
 .edition-content {
   min-height: 540px;
   display: flex;
@@ -322,9 +356,9 @@ body.leaderboard-hover .fab-group {
   width: 100%;
 }
 .edition-content-body {
-  column-count: 2;
-  column-gap: 2.2rem;
-  column-rule: 0.5px solid var(--border);
+  column-count: 1;
+  column-gap: 0;
+  column-rule: none;
 }
 .edition-content-text {
   font-family: 'Playfair Display', serif;
@@ -426,7 +460,7 @@ footer p { font-size: 11px; color: var(--text-faint); }
 .botc-lb-card {
   background: var(--surface);
   border: 0.5px solid var(--border-med);
-  border-radius: 14px;
+  border-radius: 14px 0 0 14px;
   overflow: hidden;
   box-shadow: 0 4px 24px rgba(0,0,0,0.09);
   min-width: 220px;
@@ -506,8 +540,8 @@ footer p { font-size: 11px; color: var(--text-faint); }
   width: 100%; flex: 1;
   padding: 0 14px;
   border: none; border-radius: 0;
-  font-family: 'Montserrat', sans-serif;
-  font-size: 12px; font-weight: 700; color: white;
+  font-family: 'Playfair Display', serif;
+  font-size: 14px; font-weight: 600; color: white;
   cursor: pointer; white-space: nowrap; text-align: left;
   transition: filter 0.15s, transform 0.15s;
   letter-spacing: 0.02em;
@@ -546,7 +580,162 @@ footer p { font-size: 11px; color: var(--text-faint); }
 }
 .fab:hover { background: var(--orange-light); border-color: var(--orange-mid); color: var(--orange); transform: translateY(-1px); }
 
-@media (max-width: 760px) {
+.past-editions-fab {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  width: fit-content;
+  min-width: max-content;
+}
+#past-editions-toggle {
+  display: inline-flex;
+  opacity: 1;
+  visibility: visible;
+  position: relative;
+  z-index: 2;
+}
+.past-editions-panel {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 8px);
+  width: 0;
+  max-width: min(92vw, 340px);
+  opacity: 0;
+  pointer-events: none;
+  overflow: hidden;
+  transition: width 0.24s ease, opacity 0.2s ease;
+}
+.past-editions-fab.open .past-editions-panel {
+  width: min(92vw, 340px);
+  opacity: 1;
+  pointer-events: auto;
+}
+.past-editions-inner {
+  background: var(--surface);
+  border: 0.5px solid var(--border-med);
+  border-radius: 14px;
+  box-shadow: none;
+  padding: 8px 9px;
+}
+.past-edition-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+.past-edition-btn {
+  border: none;
+  border-radius: 9px;
+  background: transparent;
+  color: var(--text);
+  padding: 8px 10px;
+  font-size: 12px;
+  font-weight: 500;
+  font-family: 'Montserrat', sans-serif;
+  text-align: left;
+  cursor: pointer;
+}
+.past-edition-btn:hover {
+  background: #F3F3F1;
+}
+.past-edition-btn.active {
+  background: #F3F3F1;
+  color: var(--orange);
+}
+.past-edition-btn-main {
+  display: block;
+}
+.past-edition-btn-date {
+  display: block;
+  margin-top: 2px;
+  font-size: 10px;
+  color: var(--text-faint);
+  font-weight: 500;
+}
+
+.past-edition-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.28s ease, visibility 0.28s ease;
+}
+.past-edition-modal.open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+.past-edition-modal-overlay {
+  position: absolute;
+  inset: 0;
+  background: transparent;
+}
+.past-edition-modal-dialog {
+  position: relative;
+  z-index: 2;
+  width: min(95vw, 1180px);
+  max-height: 88vh;
+  background: var(--surface);
+  border: 0.5px solid var(--border-med);
+  border-radius: 18px;
+  box-shadow: 0 18px 60px rgba(0,0,0,0.22);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transform: translateY(10px) scale(0.985);
+  opacity: 0;
+  transition: transform 0.28s ease, opacity 0.28s ease;
+}
+.past-edition-modal.open .past-edition-modal-dialog {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+}
+.past-edition-modal-topbar {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  border-bottom: 0.5px solid var(--border-med);
+}
+.past-edition-modal-meta {
+  flex: 1;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--orange);
+}
+.past-edition-modal-close {
+  border: 0.5px solid var(--border-med);
+  background: var(--surface);
+  border-radius: 999px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 7px 12px;
+}
+.past-edition-modal-body {
+  overflow: auto;
+  padding: 1rem;
+}
+.past-edition-modal-grid {
+  margin-bottom: 0;
+  min-height: 0;
+}
+
+@media (max-width: 1024px) {
   .content-grid {
     grid-template-columns: 1fr;
   }
@@ -560,6 +749,7 @@ footer p { font-size: 11px; color: var(--text-faint); }
   .edition-tab-tag { font-size: 8px; letter-spacing: 0.14em; }
   .edition-tab-title {
     font-size: clamp(12px, 2.8vw, 16px);
+    line-clamp: 2;
     -webkit-line-clamp: 2;
   }
   .edition-content { min-height: 0; padding: 2rem 1.25rem 2.5rem; }
@@ -601,17 +791,13 @@ footer p { font-size: 11px; color: var(--text-faint); }
 <main class="main" id="content">
 
   <div class="edition-header">
-    <span class="edition-label">Edition #1</span>
+    <span class="edition-label">Edition #4</span>
     <span class="edition-date">April 26, 2026</span>
     <div class="edition-line"></div>
   </div>
 
   <div class="content-grid">
-    <div class="edition-tabs" id="edition-tabs" role="tablist">
-      <button class="edition-tab active" type="button" role="tab" data-idx="0" aria-selected="true"></button>
-      <button class="edition-tab" type="button" role="tab" data-idx="1" aria-selected="false"></button>
-      <button class="edition-tab" type="button" role="tab" data-idx="2" aria-selected="false"></button>
-    </div>
+    <div class="edition-tabs" id="edition-tabs" role="tablist"></div>
     <div class="edition-content" id="edition-content" role="tabpanel"></div>
   </div>
 
@@ -658,13 +844,13 @@ footer p { font-size: 11px; color: var(--text-faint); }
     <div class="botc-earn-pill">EARN BOTC!</div>
     <div class="botc-game-buttons">
       <button class="bgame-btn wordle" onclick="window.open('about:blank','_blank')">
-        🟩 Wordle <span class="btn-pts">+50 pts</span>
+        Wordle <span class="btn-pts">+50 pts</span>
       </button>
       <button class="bgame-btn connections" onclick="window.open('about:blank','_blank')">
-        🟪 Connections <span class="btn-pts">+45 pts</span>
+        Connections <span class="btn-pts">+45 pts</span>
       </button>
       <button class="bgame-btn strands" onclick="window.open('about:blank','_blank')">
-        🧵 Strands <span class="btn-pts">+40 pts</span>
+        Strands <span class="btn-pts">+40 pts</span>
       </button>
     </div>
   </div>
@@ -672,12 +858,19 @@ footer p { font-size: 11px; color: var(--text-faint); }
 
 <!-- FABs (bottom-right) -->
 <div class="fab-group">
-  <a class="fab" href="about:blank" target="_blank">
-    <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8">
-      <rect x="3" y="4" width="14" height="13" rx="1.5"/><path d="M7 8h6M7 11h4"/>
-    </svg>
-    Past Editions
-  </a>
+  <div class="past-editions-fab" id="past-editions-fab">
+    <button class="fab" type="button" id="past-editions-toggle" aria-expanded="false">
+      <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8">
+        <rect x="3" y="4" width="14" height="13" rx="1.5"/><path d="M7 8h6M7 11h4"/>
+      </svg>
+      Past Editions
+    </button>
+    <div class="past-editions-panel" id="past-editions-panel">
+      <div class="past-editions-inner">
+        <div class="past-edition-list" id="past-edition-list"></div>
+      </div>
+    </div>
+  </div>
   <a class="fab" href="about:blank" target="_blank">
     <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8">
       <path d="M10 13V4M6 8l4-5 4 5"/><path d="M4 16h12"/>
@@ -686,16 +879,23 @@ footer p { font-size: 11px; color: var(--text-faint); }
   </a>
 </div>
 
-<script>
-const searchData = [
-  { tag: 'News', title: 'The Snow Problem', author: 'By John Doe' },
-  { tag: 'Opinion', title: "Why I'm Opting for Staycation This Spring Break", author: 'By Jane Doe' },
-  { tag: 'Poem', title: 'Generation Wembley', author: 'By Jack Doe' },
-  { tag: 'BOTC Game', title: 'Wordle — +50 pts' },
-  { tag: 'BOTC Game', title: 'Connections — +45 pts' },
-  { tag: 'BOTC Game', title: 'Strands — +40 pts' },
-];
+<div class="past-edition-modal" id="past-edition-modal" aria-hidden="true">
+  <div class="past-edition-modal-overlay" id="past-edition-modal-overlay"></div>
+  <div class="past-edition-modal-dialog" role="dialog" aria-modal="true" aria-label="Past edition content">
+    <div class="past-edition-modal-topbar">
+      <div class="past-edition-modal-meta" id="past-edition-modal-meta"></div>
+      <button class="past-edition-modal-close" type="button" id="past-edition-modal-close">Close</button>
+    </div>
+    <div class="past-edition-modal-body">
+      <div class="content-grid past-edition-modal-grid">
+        <div class="edition-tabs" id="past-edition-tabs" role="tablist"></div>
+        <div class="edition-content" id="past-edition-content" role="tabpanel"></div>
+      </div>
+    </div>
+  </div>
+</div>
 
+<script>
 const editionItems = [
   {
     tag: 'News',
@@ -751,7 +951,258 @@ const editionItems = [
       "it's because a dream once broken",
       'still can know exactly who you are.'
     ]
+  },
+  {
+    tag: 'BOTC Game',
+    title: 'Wordle',
+    author: 'Will be implemented later',
+    gameType: 'wordle',
+    content: ['Will be implemented later']
+  },
+  {
+    tag: 'BOTC Game',
+    title: 'Connections',
+    author: 'Will be implemented later',
+    gameType: 'connections',
+    content: ['Will be implemented later']
+  },
+  {
+    tag: 'BOTC Game',
+    title: 'Strands',
+    author: 'Will be implemented later',
+    gameType: 'strands',
+    content: ['Will be implemented later']
   }
+];
+
+const pastEditions = [
+  {
+    editionName: 'Edition #3',
+    date: 'April 19, 2026',
+    items: [
+      {
+        tag: 'News',
+        title: 'School Spirit Week Recap',
+        author: 'By Priya Shah',
+        content: [
+          'Spirit Week packed every hallway with themed outfits, class banners, and club pop-ups that made lunch periods feel more like mini festivals than routine breaks.',
+          'Student council estimated participation rose across every grade, with Wednesday and Friday events drawing the strongest turnout and more homeroom-led coordination.',
+          'The pep rally finale leaned heavily into student performances and class games, and post-event feedback asked for even more student-run segments next cycle.'
+        ]
+      },
+      {
+        tag: 'Opinion',
+        title: 'Why Hallway Displays Matter More Than We Think',
+        author: 'By Alina Thomas',
+        content: [
+          'Hallway displays often look like decoration, but they quietly shape how students feel about belonging in a space that can otherwise feel rushed and transactional.',
+          'When student art, writing, and club projects are visible, school becomes less abstract. It feels like a shared place instead of a schedule we pass through.',
+          'If we want stronger school culture, we should treat public student work as part of the learning environment, not as optional extras between announcements.'
+        ]
+      },
+      {
+        tag: 'Poem',
+        title: 'Cafeteria Clock',
+        author: 'By Noor Patel',
+        content: [
+          'The bell rings once and trays begin,',
+          'a silver tide through tiled noon light,',
+          'voices braid above the tables,',
+          'brief and loud and bright.',
+          '',
+          'Someone laughs near vending glass,',
+          'someone sketches on a sleeve,',
+          'someone saves the last few minutes',
+          'for a thought they cannot leave.',
+          '',
+          'Then the clock collects us gently,',
+          'backs and books and hallway air,',
+          'and the room, still warm with chatter,',
+          'holds the shape of being there.'
+        ]
+      },
+      {
+        tag: 'BOTC Game',
+        title: 'Wordle',
+        author: 'Will be implemented later',
+        gameType: 'wordle',
+        content: ['Will be implemented later']
+      },
+      {
+        tag: 'BOTC Game',
+        title: 'Connections',
+        author: 'Will be implemented later',
+        gameType: 'connections',
+        content: ['Will be implemented later']
+      },
+      {
+        tag: 'BOTC Game',
+        title: 'Strands',
+        author: 'Will be implemented later',
+        gameType: 'strands',
+        content: ['Will be implemented later']
+      }
+    ]
+  },
+  {
+    editionName: 'Edition #2',
+    date: 'April 12, 2026',
+    items: [
+      {
+        tag: 'News',
+        title: 'Cafeteria Feedback Drives Menu Changes',
+        author: 'By Mateo Ruiz',
+        content: [
+          'After more than four hundred survey responses, cafeteria staff piloted two rotating weekly meals and expanded vegetarian offerings requested by students.',
+          'The highest-rated updates were faster service flow and clearer signage for daily specials, which helped reduce indecision at the busiest service windows.',
+          'Administrators said the next phase will track participation and waste data so future menu updates can reflect both student preference and sustainability goals.'
+        ]
+      },
+      {
+        tag: 'Opinion',
+        title: 'Students Should Help Design Lunch Schedules',
+        author: 'By Serena Kim',
+        content: [
+          'Menu improvements are helpful, but scheduling still drives most lunch frustration. A better lunch period starts with how time is allocated, not only what is served.',
+          'Student representatives could provide practical input on line flow, seating bottlenecks, and transition timing that adults often miss from administrative vantage points.',
+          'If schools ask students for food feedback, they should also include students in timetable decisions that determine whether anyone can actually enjoy that food.'
+        ]
+      },
+      {
+        tag: 'Poem',
+        title: 'Tray Lines',
+        author: 'By Ishan Mehta',
+        content: [
+          'We shuffle forward, inch by inch,',
+          'beneath the hum of fluorescent noon,',
+          'names of meals on paper cards,',
+          'the promise of a spoon.',
+          '',
+          'Steam curls up like weather maps,',
+          'pointing where the crowd will turn,',
+          'every minute folded tightly',
+          'into what we choose and learn.',
+          '',
+          'By the time the last seat fills,',
+          'conversation starts to rise,',
+          'and a simple tray becomes',
+          'a small republic of replies.'
+        ]
+      },
+      {
+        tag: 'BOTC Game',
+        title: 'Wordle',
+        author: 'Will be implemented later',
+        gameType: 'wordle',
+        content: ['Will be implemented later']
+      },
+      {
+        tag: 'BOTC Game',
+        title: 'Connections',
+        author: 'Will be implemented later',
+        gameType: 'connections',
+        content: ['Will be implemented later']
+      },
+      {
+        tag: 'BOTC Game',
+        title: 'Strands',
+        author: 'Will be implemented later',
+        gameType: 'strands',
+        content: ['Will be implemented later']
+      }
+    ]
+  },
+  {
+    editionName: 'Edition #1',
+    date: 'April 5, 2026',
+    items: [
+      {
+        tag: 'News',
+        title: 'Spring Arts Showcase Announces Lineup',
+        author: 'By Emily Tran',
+        content: [
+          'The arts department released this year\'s showcase lineup, including student bands, spoken-word performances, photography walls, and collaborative visual installations.',
+          'Teachers emphasized that the event is designed as a cross-discipline exhibit, with music, literary arts, and studio pieces sharing one audience flow throughout the evening.',
+          'Organizers opened volunteer sign-ups for stage crew, lighting support, and gallery guides so students can participate behind the scenes as well as on stage.'
+        ]
+      },
+      {
+        tag: 'Opinion',
+        title: 'Art Nights Should Be Schoolwide Priorities',
+        author: 'By Daniel Cho',
+        content: [
+          'Arts events are often promoted as optional enrichment, but they do something core academics cannot: they let students show identity through voice, movement, and design.',
+          'When school calendars crowd out arts nights, the message is that creative work matters less than measurable outputs. Students notice that hierarchy immediately.',
+          'Treating showcases as anchor events would strengthen attendance, morale, and interdisciplinary pride in ways that standard assemblies rarely accomplish.'
+        ]
+      },
+      {
+        tag: 'Poem',
+        title: 'Backstage Tape',
+        author: 'By Riya Nair',
+        content: [
+          'Blue tape marks the waiting place,',
+          'left wing, quiet, breathing slow,',
+          'someone counts the beats in whispers,',
+          'someone mouths the words they know.',
+          '',
+          'Curtain light leaks through the dark,',
+          'gold and dust and paper stars,',
+          'every heartbeat turns electric',
+          'under rigging, cords, and bars.',
+          '',
+          'Then a cue and all at once',
+          'nervous hands become a flame,',
+          'and the stage, for one bright evening,',
+          'learns the shape of every name.'
+        ]
+      },
+      {
+        tag: 'BOTC Game',
+        title: 'Wordle',
+        author: 'Will be implemented later',
+        gameType: 'wordle',
+        content: ['Will be implemented later']
+      },
+      {
+        tag: 'BOTC Game',
+        title: 'Connections',
+        author: 'Will be implemented later',
+        gameType: 'connections',
+        content: ['Will be implemented later']
+      },
+      {
+        tag: 'BOTC Game',
+        title: 'Strands',
+        author: 'Will be implemented later',
+        gameType: 'strands',
+        content: ['Will be implemented later']
+      }
+    ]
+  }
+];
+
+const searchData = [
+  ...editionItems.filter((item) => item.tag !== 'BOTC Game').map((item, index) => ({
+    tag: item.tag,
+    title: item.title,
+    author: item.author,
+    target: 'current',
+    editionIndex: index
+  })),
+  ...pastEditions.flatMap((edition, editionIndex) =>
+    edition.items.filter((item) => item.tag !== 'BOTC Game').map((item, itemIndex) => ({
+      tag: item.tag,
+      title: item.title,
+      author: item.author,
+      target: 'past',
+      pastEditionIndex: editionIndex,
+      pastItemIndex: itemIndex
+    }))
+  ),
+  { tag: 'BOTC Game', title: 'Wordle — +50 pts' },
+  { tag: 'BOTC Game', title: 'Connections — +45 pts' },
+  { tag: 'BOTC Game', title: 'Strands — +40 pts' }
 ];
 
 const sinput = document.getElementById('search-input');
@@ -759,11 +1210,23 @@ const sresults = document.getElementById('search-results');
 const heroSection = document.querySelector('.hero-section');
 const heroDotGrid = document.querySelector('.hero-dot-grid');
 const botcFloat = document.querySelector('.botc-float');
-const editionTabs = Array.from(document.querySelectorAll('.edition-tab'));
+const editionTabsContainer = document.getElementById('edition-tabs');
 const editionContent = document.getElementById('edition-content');
 const contentSection = document.getElementById('content');
+const pastEditionsFab = document.getElementById('past-editions-fab');
+const pastEditionsToggle = document.getElementById('past-editions-toggle');
+const pastEditionList = document.getElementById('past-edition-list');
+const pastEditionContent = document.getElementById('past-edition-content');
+const pastEditionTabs = document.getElementById('past-edition-tabs');
+const pastEditionModal = document.getElementById('past-edition-modal');
+const pastEditionModalOverlay = document.getElementById('past-edition-modal-overlay');
+const pastEditionModalMeta = document.getElementById('past-edition-modal-meta');
+const pastEditionModalClose = document.getElementById('past-edition-modal-close');
 let setHeroGridSearching = () => {};
 let currentSearchHits = [];
+let selectedPastEdition = 0;
+let selectedPastItemByEdition = {};
+let editionTabs = [];
 
 function initHeroDotGrid() {
   if (!heroSection || !heroDotGrid) return;
@@ -774,9 +1237,9 @@ function initHeroDotGrid() {
     width: 0,
     height: 0,
     dpr: 1,
-    pointerX: 0,
-    pointerY: 0,
-    pointerInside: false,
+    dots: [],
+    influencers: [],
+    lastFrameMs: 0,
     searchFadeProgress: 0,
     searchFadeTarget: 0,
     searchFadeFrom: 0,
@@ -786,13 +1249,80 @@ function initHeroDotGrid() {
   };
   const settings = {
     gap: 28,
-    baseRadius: 1.15,
-    maxRadius: 2.35,
-    influenceRadius: 180
+    baseRadius: 1.25,
+    maxRadius: 2.95,
+    maxOffset: 7,
+    influenceRadius: 260,
+    influenceCount: 6,
+    influencerSpeedMin: 95,
+    influencerSpeedMax: 190,
+    influencerTurnSpeed: 1.1
   };
+
+  function randomInfluencer() {
+    return {
+      x: Math.random() * state.width,
+      y: Math.random() * state.height,
+      heading: Math.random() * Math.PI * 2,
+      speed: settings.influencerSpeedMin + (Math.random() * (settings.influencerSpeedMax - settings.influencerSpeedMin)),
+      wanderSeed: Math.random() * Math.PI * 2
+    };
+  }
+
+  function buildDots() {
+    state.dots = [];
+    const xStart = settings.gap * 0.5;
+    const yStart = settings.gap * 0.5;
+    for (let y = yStart; y < state.height; y += settings.gap) {
+      for (let x = xStart; x < state.width; x += settings.gap) {
+        state.dots.push({
+          anchorX: x,
+          anchorY: y,
+          radiusNoise: Math.random()
+        });
+      }
+    }
+  }
+
+  function buildInfluencers() {
+    state.influencers = [];
+    const count = Math.max(1, settings.influenceCount);
+    for (let i = 0; i < count; i += 1) {
+      state.influencers.push(randomInfluencer());
+    }
+  }
+
+  function updateInfluencers(dt, nowMs) {
+    const t = nowMs * 0.001;
+    for (let i = 0; i < state.influencers.length; i += 1) {
+      const influencer = state.influencers[i];
+      const drift = Math.sin(t * 0.48 + influencer.wanderSeed) * settings.influencerTurnSpeed;
+      influencer.heading += drift * dt;
+      influencer.x += Math.cos(influencer.heading) * influencer.speed * dt;
+      influencer.y += Math.sin(influencer.heading) * influencer.speed * dt;
+
+      if (influencer.x < 0) {
+        influencer.x = 0;
+        influencer.heading = Math.PI - influencer.heading;
+      } else if (influencer.x > state.width) {
+        influencer.x = state.width;
+        influencer.heading = Math.PI - influencer.heading;
+      }
+      if (influencer.y < 0) {
+        influencer.y = 0;
+        influencer.heading = -influencer.heading;
+      } else if (influencer.y > state.height) {
+        influencer.y = state.height;
+        influencer.heading = -influencer.heading;
+      }
+    }
+  }
 
   function draw(nowMs) {
     state.rafId = 0;
+    if (!state.lastFrameMs) state.lastFrameMs = nowMs;
+    const dt = Math.min(0.04, Math.max(0.001, (nowMs - state.lastFrameMs) / 1000));
+    state.lastFrameMs = nowMs;
     if (state.searchFadeProgress !== state.searchFadeTarget) {
       const elapsed = Math.max(0, nowMs - state.searchFadeStartMs);
       const t = Math.min(1, elapsed / state.searchFadeDurationMs);
@@ -804,40 +1334,39 @@ function initHeroDotGrid() {
     }
 
     ctx.clearRect(0, 0, state.width, state.height);
-    const xStart = settings.gap * 0.5;
-    const yStart = settings.gap * 0.5;
+    updateInfluencers(dt, nowMs);
     const fadeEdgeSoftness = 100;
     const fadeLine = ((1 - state.searchFadeProgress) * (state.height + fadeEdgeSoftness)) - fadeEdgeSoftness;
 
-    for (let y = yStart; y < state.height; y += settings.gap) {
-      for (let x = xStart; x < state.width; x += settings.gap) {
-        let t = 0;
-        if (state.pointerInside) {
-          const dx = x - state.pointerX;
-          const dy = y - state.pointerY;
-          const dist = Math.sqrt((dx * dx) + (dy * dy));
-          t = Math.max(0, 1 - (dist / settings.influenceRadius));
-        }
-        const radius = settings.baseRadius + ((settings.maxRadius - settings.baseRadius) * t * t);
-        const tint = t * 0.9;
-        const r = Math.round(26 + ((232 - 26) * tint));
-        const g = Math.round(26 + ((133 - 26) * tint));
-        const b = Math.round(24 + ((10 - 24) * tint));
-        let alpha = 0.16 + (0.24 * t);
-        if (state.searchFadeProgress > 0) {
-          const linearKeep = Math.max(0, Math.min(1, ((fadeLine - y) / fadeEdgeSoftness) + 0.5));
-          alpha *= linearKeep;
-        }
-        ctx.beginPath();
-        ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${alpha.toFixed(3)})`;
-        ctx.arc(x, y, radius, 0, Math.PI * 2);
-        ctx.fill();
+    for (let i = 0; i < state.dots.length; i += 1) {
+      const dot = state.dots[i];
+      const x = dot.anchorX;
+      const y = dot.anchorY;
+      let influence = 0;
+      for (let j = 0; j < state.influencers.length; j += 1) {
+        const influencer = state.influencers[j];
+        const dx = x - influencer.x;
+        const dy = y - influencer.y;
+        const dist = Math.hypot(dx, dy);
+        const local = Math.max(0, 1 - (dist / settings.influenceRadius));
+        if (local > influence) influence = local;
       }
+      const influenceMix = Math.min(1, (influence * 0.9) + (dot.radiusNoise * 0.12));
+      const radius = settings.baseRadius + ((settings.maxRadius - settings.baseRadius) * influenceMix);
+      const r = Math.round(174 + ((224 - 174) * influenceMix));
+      const g = Math.round(174 + ((122 - 174) * influenceMix));
+      const b = Math.round(174 + ((16 - 174) * influenceMix));
+      let alpha = 0.24 + (0.14 * influenceMix);
+      if (state.searchFadeProgress > 0) {
+        const linearKeep = Math.max(0, Math.min(1, ((fadeLine - y) / fadeEdgeSoftness) + 0.5));
+        alpha *= linearKeep;
+      }
+      ctx.beginPath();
+      ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${alpha.toFixed(3)})`;
+      ctx.arc(x, y, radius, 0, Math.PI * 2);
+      ctx.fill();
     }
-
-    if (state.searchFadeProgress !== state.searchFadeTarget) {
-      requestDraw();
-    }
+    requestDraw();
   }
 
   function requestDraw() {
@@ -854,25 +1383,15 @@ function initHeroDotGrid() {
     state.width = nextWidth;
     state.height = nextHeight;
     state.dpr = nextDpr;
+    state.lastFrameMs = 0;
 
     heroDotGrid.width = Math.floor(nextWidth * nextDpr);
     heroDotGrid.height = Math.floor(nextHeight * nextDpr);
     ctx.setTransform(nextDpr, 0, 0, nextDpr, 0, 0);
+    buildDots();
+    buildInfluencers();
     requestDraw();
   }
-
-  heroSection.addEventListener('pointermove', (event) => {
-    const rect = heroSection.getBoundingClientRect();
-    state.pointerInside = true;
-    state.pointerX = event.clientX - rect.left;
-    state.pointerY = event.clientY - rect.top;
-    requestDraw();
-  });
-
-  heroSection.addEventListener('pointerleave', () => {
-    state.pointerInside = false;
-    requestDraw();
-  });
 
   window.addEventListener('resize', resizeCanvas);
 
@@ -908,10 +1427,24 @@ function editionTabMarkup(item) {
   );
 }
 
+function editionTabClassSuffix(item) {
+  if (!item || item.tag !== 'BOTC Game') return '';
+  return ' game-tab game-' + String(item.gameType || '').toLowerCase();
+}
+
+function buildMainEditionTabs() {
+  if (!editionTabsContainer) return;
+  editionTabsContainer.innerHTML = editionItems.map((item, index) =>
+    '<button class="edition-tab' + editionTabClassSuffix(item) + (index === 0 ? ' active' : '') + '" type="button" role="tab" data-idx="' + index + '" aria-selected="' + (index === 0 ? 'true' : 'false') + '"></button>'
+  ).join('');
+  editionTabs = Array.from(editionTabsContainer.querySelectorAll('.edition-tab'));
+}
+
 function syncEditionTabs() {
   editionTabs.forEach((tab, i) => {
     const item = editionItems[i];
     tab.innerHTML = editionTabMarkup(item);
+    tab.className = 'edition-tab' + editionTabClassSuffix(item) + (tab.classList.contains('active') ? ' active' : '');
     tab.setAttribute('aria-label', item ? item.tag + ': ' + item.title : '');
   });
 }
@@ -948,14 +1481,123 @@ function renderEdition(index) {
     '</article>';
 }
 
-function getEditionIndexForSearchItem(item) {
-  return editionItems.findIndex((editionItem) =>
-    editionItem.title === item.title && editionItem.tag === item.tag
-  );
+function renderEditionInPane(options) {
+  const items = options.items || [];
+  const tabs = options.tabs || [];
+  const contentPane = options.contentPane;
+  const activeIndex = options.activeIndex || 0;
+  tabs.forEach((tab, i) => {
+    tab.classList.toggle('active', i === activeIndex);
+    tab.setAttribute('aria-selected', i === activeIndex ? 'true' : 'false');
+    tab.setAttribute('tabindex', i === activeIndex ? '0' : '-1');
+  });
+  const current = items[activeIndex];
+  if (!current || !contentPane) return;
+  const paragraphs = Array.isArray(current.content) ? current.content : [current.content];
+  const isPoem = String(current.tag).toLowerCase() === 'poem';
+  const body = paragraphs.map((line) => {
+    if (!line.trim()) {
+      return isPoem
+        ? '<div class="poem-stanza-break" aria-hidden="true"></div>'
+        : '<p class="edition-content-text">&nbsp;</p>';
+    }
+    return '<p class="edition-content-text">' + escapeHtml(line) + '</p>';
+  }).join('');
+  contentPane.innerHTML =
+    '<article class="edition-content-wrap' + (isPoem ? ' poem-layout' : '') + '">' +
+      '<p class="edition-content-meta">' + escapeHtml(current.tag) + '</p>' +
+      '<h2 class="edition-content-headline">' + escapeHtml(current.title) + '</h2>' +
+      '<p class="edition-content-author">' + escapeHtml(current.author || 'By Eagle Eyelet Staff') + '</p>' +
+      '<div class="edition-content-body">' + body + '</div>' +
+    '</article>';
 }
 
+function setPastEditionsOpen(isOpen) {
+  if (!pastEditionsFab || !pastEditionsToggle) return;
+  pastEditionsFab.classList.toggle('open', isOpen);
+  pastEditionsToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  syncPastEditionsFocus();
+}
+
+function renderPastEditionButtons() {
+  if (!pastEditionList) return;
+  pastEditionList.innerHTML = pastEditions.map((item, index) =>
+    '<button class="past-edition-btn' + (index === selectedPastEdition ? ' active' : '') + '" type="button" data-past-edition-index="' + index + '" aria-pressed="' + (index === selectedPastEdition ? 'true' : 'false') + '">' +
+      '<span class="past-edition-btn-main">' + escapeHtml(item.editionName) + '</span>' +
+      '<span class="past-edition-btn-date">' + escapeHtml(item.date) + '</span>' +
+    '</button>'
+  ).join('');
+}
+
+function renderPastEditionModalTabs(editionIndex) {
+  const edition = pastEditions[editionIndex];
+  if (!edition || !pastEditionTabs) return [];
+  pastEditionTabs.innerHTML = edition.items.map((item, itemIndex) =>
+    '<button class="edition-tab' + editionTabClassSuffix(item) + (((selectedPastItemByEdition[editionIndex] || 0) === itemIndex) ? ' active' : '') + '" type="button" role="tab" data-past-item-index="' + itemIndex + '" aria-selected="' + (((selectedPastItemByEdition[editionIndex] || 0) === itemIndex) ? 'true' : 'false') + '">' +
+      editionTabMarkup(item) +
+    '</button>'
+  ).join('');
+  return Array.from(pastEditionTabs.querySelectorAll('.edition-tab'));
+}
+
+function openPastEditionModal(editionIndex, itemIndex) {
+  const edition = pastEditions[editionIndex];
+  if (!edition || !pastEditionModal || !pastEditionContent) return;
+  selectedPastEdition = editionIndex;
+  const safeItemIndex = Number.isInteger(itemIndex) ? itemIndex : (selectedPastItemByEdition[editionIndex] || 0);
+  selectedPastItemByEdition[editionIndex] = Math.max(0, Math.min(edition.items.length - 1, safeItemIndex));
+  const modalTabs = renderPastEditionModalTabs(editionIndex);
+  if (pastEditionModalMeta) {
+    pastEditionModalMeta.textContent = edition.editionName + ' · ' + edition.date;
+  }
+  renderEditionInPane({
+    items: edition.items,
+    tabs: modalTabs,
+    contentPane: pastEditionContent,
+    activeIndex: selectedPastItemByEdition[editionIndex]
+  });
+  pastEditionModal.classList.add('open');
+  pastEditionModal.setAttribute('aria-hidden', 'false');
+  setPastEditionsOpen(false);
+  renderPastEditionButtons();
+  syncPastEditionsFocus();
+}
+
+function closePastEditionModal() {
+  if (!pastEditionModal) return;
+  pastEditionModal.classList.remove('open');
+  pastEditionModal.setAttribute('aria-hidden', 'true');
+  syncPastEditionsFocus();
+}
+
+function syncPastEditionsFocus() {
+  const isChooserOpen = Boolean(pastEditionsFab && pastEditionsFab.classList.contains('open'));
+  const isModalOpen = Boolean(pastEditionModal && pastEditionModal.classList.contains('open'));
+  document.body.classList.toggle('past-editions-active', isChooserOpen || isModalOpen);
+}
+
+function navigateToSearchHit(hit) {
+  if (!hit) return;
+  if (hit.target === 'current' && Number.isInteger(hit.editionIndex)) {
+    renderEdition(hit.editionIndex);
+    if (contentSection) {
+      contentSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    return;
+  }
+  if (hit.target === 'past' && Number.isInteger(hit.pastEditionIndex)) {
+    setPastEditionsOpen(true);
+    openPastEditionModal(hit.pastEditionIndex, hit.pastItemIndex);
+    if (pastEditionsFab) {
+      pastEditionsFab.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  }
+}
+
+buildMainEditionTabs();
 syncEditionTabs();
 renderEdition(0);
+renderPastEditionButtons();
 initHeroDotGrid();
 
 if (botcFloat) {
@@ -970,6 +1612,49 @@ if (botcFloat) {
 editionTabs.forEach((tab, index) => {
   tab.addEventListener('click', () => renderEdition(index));
 });
+
+if (pastEditionsToggle) {
+  pastEditionsToggle.addEventListener('click', () => {
+    const nextOpen = !pastEditionsFab.classList.contains('open');
+    setPastEditionsOpen(nextOpen);
+  });
+}
+
+if (pastEditionList) {
+  pastEditionList.addEventListener('click', (event) => {
+    const targetButton = event.target.closest('.past-edition-btn');
+    if (!targetButton) return;
+    const index = Number(targetButton.dataset.pastEditionIndex);
+    if (!Number.isInteger(index) || index < 0 || index >= pastEditions.length) return;
+    openPastEditionModal(index, 0);
+  });
+}
+
+if (pastEditionTabs) {
+  pastEditionTabs.addEventListener('click', (event) => {
+    const tabButton = event.target.closest('.edition-tab');
+    if (!tabButton) return;
+    const itemIndex = Number(tabButton.dataset.pastItemIndex);
+    const edition = pastEditions[selectedPastEdition];
+    if (!edition || !Number.isInteger(itemIndex) || itemIndex < 0 || itemIndex >= edition.items.length) return;
+    selectedPastItemByEdition[selectedPastEdition] = itemIndex;
+    const modalTabs = Array.from(pastEditionTabs.querySelectorAll('.edition-tab'));
+    renderEditionInPane({
+      items: edition.items,
+      tabs: modalTabs,
+      contentPane: pastEditionContent,
+      activeIndex: itemIndex
+    });
+  });
+}
+
+if (pastEditionModalOverlay) {
+  pastEditionModalOverlay.addEventListener('click', closePastEditionModal);
+}
+
+if (pastEditionModalClose) {
+  pastEditionModalClose.addEventListener('click', closePastEditionModal);
+}
 
 sinput.addEventListener('input', () => {
   const q = sinput.value.trim().toLowerCase();
@@ -1014,13 +1699,7 @@ sresults.addEventListener('click', (event) => {
   const selectedHit = currentSearchHits[hitIndex];
   if (!selectedHit) return;
 
-  const editionIndex = getEditionIndexForSearchItem(selectedHit);
-  if (editionIndex !== -1) {
-    renderEdition(editionIndex);
-    if (contentSection) {
-      contentSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  }
+  navigateToSearchHit(selectedHit);
 
   sresults.classList.remove('visible');
   sinput.blur();
@@ -1040,6 +1719,9 @@ document.addEventListener('click', e => {
     sresults.classList.remove('visible');
     updateSearchState();
   }
+  if (pastEditionsFab && !e.target.closest('#past-editions-fab')) {
+    setPastEditionsOpen(false);
+  }
 });
 sinput.addEventListener('focus', updateSearchState);
 sinput.addEventListener('blur', () => {
@@ -1050,6 +1732,7 @@ sinput.addEventListener('keydown', e => {
     sresults.classList.remove('visible');
     sinput.blur();
     updateSearchState();
+    closePastEditionModal();
   }
 });
 </script>
