@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Eagle Eyelet</title>
+<link rel="icon" type="image/png" href="favicon.png?v=2">
+<link rel="apple-touch-icon" href="favicon.png?v=2">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --orange: #E8850A;
+  --orange-light: #FDF3E3;
+  --orange-mid: #F5A832;
+  --purple: #7A56D6;
+  --text: #1A1A18;
+  --text-muted: #6B6B66;
+  --text-faint: #9E9E98;
+  --border: rgba(0,0,0,0.08);
+  --border-med: rgba(0,0,0,0.14);
+  --bg: #FAFAF8;
+  --panel-gray: #F2F2F2;
+  --surface: #FFFFFF;
+  --search-col-width: 340px;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Montserrat', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 16px;
+  line-height: 1.65;
+}
+body > * {
+  transition: filter 0.45s ease;
+}
+body.leaderboard-hover .hero-section,
+body.leaderboard-hover .main,
+body.leaderboard-hover footer,
+body.leaderboard-hover .fab-group {
+  filter: blur(4px);
+}
+
+/* HERO — full viewport */
+.hero-section {
+  height: 100vh;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  text-align: center;
+  padding: 0 2.5rem;
+  position: relative;
+  overflow: hidden;
+  --cursor-energy: 0;
+  border-bottom: 0.5px solid var(--border-med);
+  transition: background-color 0.3s ease, filter 0.45s ease;
+}
+.hero-section.search-active {
+  background-color: var(--bg);
+}
+.hero-section > *:not(.hero-dot-grid) {
+  position: relative;
+  z-index: 2;
+}
+.hero-dot-grid {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.95;
+}
+.hero-eyebrow {
+  font-size: 10px; font-weight: 600; letter-spacing: 0.2em;
+  text-transform: uppercase; color: var(--text-faint);
+  margin-bottom: 1.5rem;
+}
+.hero-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: clamp(54px, 9vw, 96px);
+  font-weight: 300; letter-spacing: -0.04em;
+  line-height: 1.0; color: var(--text);
+  margin-bottom: 1.4rem;
+}
+.hero-title .let { color: var(--orange); font-weight: 600; }
+
+/* Search */
+.search-outer {
+  position: relative; width: 380px; max-width: 90vw; z-index: 50;
+}
+.search-wrap {
+  display: flex; align-items: center;
+  border: 1px solid var(--orange-mid);
+  border-radius: 40px;
+  padding: 0 1.25rem;
+  height: 48px;
+  background: var(--surface);
+  box-shadow: 0 0 0 5px var(--orange-light);
+  transition: box-shadow 0.25s;
+  position: relative; z-index: 2;
+}
+.search-wrap:focus-within { box-shadow: 0 0 0 8px var(--orange-light); }
+.search-icon { color: var(--text-faint); flex-shrink: 0; margin-right: 10px; width:15px; height:15px; }
+.search-wrap input {
+  border: none; outline: none; background: transparent;
+  font-family: 'Montserrat', sans-serif; font-size: 13px;
+  color: var(--text); width: 100%;
+  caret-color: var(--orange);
+}
+.search-wrap input::placeholder { color: var(--text-faint); }
+
+/* Search results — free-floating, fades above content */
+#search-results {
+  position: absolute; top: calc(100% + 14px); left: 50%; transform: translateX(-50%) translateY(8px);
+  width: fit-content; max-width: 92vw;
+  background: var(--bg);
+  border: none;
+  border-radius: 0;
+  padding: 8px 0;
+  opacity: 0; visibility: hidden; pointer-events: none;
+  z-index: 100;
+  box-shadow: 0 16px 48px var(--bg);
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
+}
+#search-results.visible {
+  opacity: 1; visibility: visible; pointer-events: auto;
+  transform: translateX(-50%) translateY(0);
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateX(-50%) translateY(8px); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+.sr-header {
+  font-size: 9px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--text-faint); padding: 8px 20px 6px;
+  background: transparent;
+}
+.sr-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 20px; cursor: pointer;
+  background: var(--bg);
+  transition: background 0.12s;
+  width: min(var(--search-col-width), 92vw);
+}
+.sr-item:hover { background: #ECECEA; }
+.sr-grid {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: var(--search-col-width);
+  grid-template-rows: repeat(3, auto);
+  max-width: 92vw;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+.sr-grid .sr-item {
+  min-width: 0;
+}
+.sr-tag {
+  font-size: 9px; font-weight: 700; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--orange);
+  background: var(--orange-light); padding: 2px 8px; border-radius: 20px;
+  white-space: nowrap; flex-shrink: 0;
+}
+.sr-title {
+  display: block;
+  flex: 1;
+  text-align: left;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text);
+  line-height: 1.3;
+}
+.sr-title-wrap {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+}
+.sr-author {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-style: italic;
+  line-height: 1.2;
+}
+.sr-empty {
+  padding: 20px; font-size: 13px; color: var(--text-faint);
+  text-align: center; font-style: italic; background: var(--bg);
+}
+.sr-divider { height: 6px; background: transparent; margin: 0; }
+
+/* MAIN */
+.main {
+  max-width: 1200px; margin: 0 auto;
+  padding: 4rem 2.5rem 9rem;
+}
+
+.edition-header {
+  display: flex; align-items: center; gap: 1.5rem; margin-bottom: 3rem;
+}
+.edition-label {
+  font-size: 10px; font-weight: 700; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--orange);
+  background: var(--orange-light); padding: 5px 14px; border-radius: 20px;
+  white-space: nowrap;
+}
+.edition-date {
+  font-family: 'Playfair Display', serif;
+  font-style: italic; font-size: 14px; color: var(--text-faint); white-space: nowrap;
+}
+.edition-line { flex: 1; height: 0.5px; background: var(--border-med); }
+
+/* Edition layout — left title rail + large reading panel */
+.content-grid {
+  display: grid;
+  grid-template-columns: minmax(220px, 330px) 1fr;
+  align-items: stretch;
+  margin-bottom: 5rem;
+  background: var(--panel-gray);
+  border: 0.5px solid var(--border-med);
+  overflow: hidden;
+}
+.edition-tabs {
+  display: flex;
+  flex-direction: column;
+  align-self: stretch;
+  min-height: 100%;
+  background: var(--panel-gray);
+  border-right: 0.5px solid var(--border-med);
+}
+.edition-tabs::after {
+  content: '';
+  flex: 1;
+  background: var(--panel-gray);
+}
+.edition-tab {
+  border: none;
+  border-bottom: 0.5px solid var(--border-med);
+  background: var(--panel-gray);
+  color: var(--text);
+  min-height: 145px;
+  cursor: pointer;
+  transition: background 0.18s ease, color 0.18s ease;
+  padding: 1.2rem 1.15rem;
+  position: relative;
+  z-index: 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  text-align: left;
+}
+.edition-tab-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.65rem;
+  width: 100%;
+  max-width: 100%;
+}
+.edition-tab-tag {
+  display: inline-block;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--orange);
+  line-height: 1.2;
+}
+.edition-tab-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(15px, 1.4vw, 21px);
+  font-weight: 600;
+  line-height: 1.22;
+  color: var(--text);
+  text-align: left;
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  width: 100%;
+}
+.edition-tab-author {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  line-height: 1.2;
+}
+.edition-tab:last-child { border-bottom: none; }
+.edition-tab:hover:not(.active) {
+  background: #e8e8e8;
+}
+.edition-tab.active {
+  background: var(--surface);
+  color: var(--text);
+  z-index: 1;
+  border-right: 0.5px solid var(--surface);
+  box-shadow: none;
+}
+.edition-content {
+  min-height: 540px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  text-align: left;
+  padding: 2.75rem 2.75rem 3.25rem;
+  background: var(--surface);
+  border-top: none;
+}
+.edition-content-wrap {
+  max-width: 980px;
+  width: 100%;
+}
+.edition-content-body {
+  column-count: 2;
+  column-gap: 2.2rem;
+  column-rule: 0.5px solid var(--border);
+}
+.edition-content-text {
+  font-family: 'Playfair Display', serif;
+  font-size: 17px;
+  line-height: 1.75;
+  color: #2B2B28;
+  margin: 0 0 1rem;
+  text-align: justify;
+  break-inside: avoid;
+  hyphens: auto;
+}
+.edition-content-text:last-child {
+  margin-bottom: 0;
+}
+.edition-content-body .edition-content-text:first-child::first-letter {
+  float: left;
+  font-size: 3.25em;
+  line-height: 0.9;
+  padding-right: 0.07em;
+  padding-top: 0.06em;
+  font-weight: 600;
+  color: var(--text);
+}
+.edition-content-headline {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(26px, 3vw, 34px);
+  font-weight: 600;
+  line-height: 1.15;
+  color: var(--text);
+  margin-bottom: 1rem;
+}
+.edition-content-meta {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--orange);
+  background: var(--orange-light);
+  padding: 4px 10px;
+  border-radius: 999px;
+  margin-bottom: 1.1rem;
+}
+.edition-content-author {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin: 0 0 1rem;
+}
+.edition-content-text:first-child { margin-top: 0; }
+
+/* Poem presentation */
+.edition-content-wrap.poem-layout .edition-content-body {
+  column-count: 1;
+  column-gap: 0;
+  column-rule: none;
+}
+.edition-content-wrap.poem-layout .edition-content-text {
+  font-size: 22px;
+  line-height: 1.55;
+  text-align: left;
+  margin: 0;
+  break-inside: avoid;
+  hyphens: none;
+}
+.edition-content-wrap.poem-layout .edition-content-body .edition-content-text:first-child::first-letter {
+  float: none;
+  font-size: inherit;
+  line-height: inherit;
+  padding: 0;
+  font-weight: inherit;
+  color: inherit;
+}
+.poem-stanza-break {
+  height: 1.1rem;
+}
+
+/* FOOTER */
+footer {
+  border-top: 0.5px solid var(--border-med);
+  padding: 2.5rem; text-align: center;
+}
+.footer-logo {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 20px; font-weight: 300; letter-spacing: -0.02em; margin-bottom: 0.3rem;
+}
+.footer-logo span { color: var(--orange); font-weight: 600; }
+footer p { font-size: 11px; color: var(--text-faint); }
+
+/* ── BOTC FLOAT (bottom-left) ── */
+.botc-float {
+  position: fixed; bottom: 1.75rem; left: 1.75rem; z-index: 500;
+  display: flex; flex-direction: row; align-items: stretch;
+}
+
+/* leaderboard card — always visible */
+.botc-lb-card {
+  background: var(--surface);
+  border: 0.5px solid var(--border-med);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.09);
+  min-width: 220px;
+}
+.botc-title-row {
+  display: flex; align-items: center; gap: 8px;
+  padding: 10px 16px 6px;
+  border-bottom: 0.5px solid var(--border);
+}
+.botc-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--orange); flex-shrink: 0;
+  box-shadow: 0 0 0 3px var(--orange-light);
+}
+.botc-title-row .title-text {
+  font-size: 11px; font-weight: 700; letter-spacing: 0.04em; color: var(--text);
+}
+.botc-title-row .title-text span { color: var(--orange); }
+
+.lb-rows { padding: 6px 16px 10px; }
+.lb-row {
+  display: flex; align-items: center; gap: 8px;
+  padding: 4px 0;
+  font-size: 11px;
+}
+.lb-rank { font-size: 9px; color: var(--text-faint); font-weight: 700; width: 12px; flex-shrink:0; }
+.lb-rank.gold { color: var(--orange); }
+.lb-name { flex: 1; font-weight: 500; }
+.lb-val { font-size: 12px; font-weight: 700; color: var(--orange); }
+
+/* game buttons panel — slides in from the left card */
+.botc-games-panel {
+  position: relative;
+  display: flex; flex-direction: column; justify-content: stretch; gap: 0;
+  background: var(--surface);
+  border: 0.5px solid var(--border-med);
+  border-left: none;
+  border-radius: 0 14px 14px 0;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.09);
+  margin-left: -8px;
+  padding: 0;
+  width: 44px;
+  max-width: 44px; overflow: hidden;
+  transition: max-width 0.38s cubic-bezier(0.4,0,0.2,1), width 0.38s cubic-bezier(0.4,0,0.2,1);
+}
+.botc-float:hover .botc-games-panel {
+  width: 180px;
+  max-width: 180px;
+}
+
+.botc-earn-pill {
+  display: flex; align-items: center; justify-content: center; flex: 1;
+  width: 100%;
+  font-size: 10px; font-weight: 800; letter-spacing: 0.1em;
+  color: var(--orange); text-transform: uppercase;
+  writing-mode: horizontal-tb;
+  transform: rotate(90deg);
+  white-space: nowrap; line-height: 1;
+  opacity: 1;
+  transition: opacity 0.18s ease, visibility 0.18s ease;
+}
+.botc-game-buttons {
+  display: flex; flex-direction: column; gap: 0;
+  position: absolute; inset: 0;
+  opacity: 0; visibility: hidden;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+.botc-float:hover .botc-earn-pill {
+  opacity: 0; visibility: hidden;
+}
+.botc-float:hover .botc-game-buttons {
+  opacity: 1; visibility: visible;
+}
+
+.bgame-btn {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  width: 100%; flex: 1;
+  padding: 0 14px;
+  border: none; border-radius: 0;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12px; font-weight: 700; color: white;
+  cursor: pointer; white-space: nowrap; text-align: left;
+  transition: filter 0.15s, transform 0.15s;
+  letter-spacing: 0.02em;
+  -webkit-appearance: none;
+  appearance: none;
+}
+.bgame-btn:hover { filter: brightness(1.07); }
+.bgame-btn.wordle { background: #4A80D9; }
+.bgame-btn.strands { background: #2A9D8F; }
+.bgame-btn.connections { background: var(--purple); }
+.bgame-btn.wordle { border-radius: 0 14px 0 0; }
+.bgame-btn.connections { border-radius: 0; }
+.bgame-btn.strands { border-radius: 0 0 14px 0; }
+.bgame-btn .btn-pts {
+  margin-left: auto; font-size: 10px; font-weight: 600;
+  opacity: 0.85;
+}
+
+/* FABs (bottom-right) */
+.fab-group {
+  position: fixed; bottom: 1.75rem; right: 1.75rem; z-index: 500;
+  display: flex; flex-direction: column; gap: 10px; align-items: flex-end;
+}
+.fab {
+  display: flex; align-items: center; gap: 9px;
+  padding: 11px 20px;
+  background: var(--surface);
+  border: 0.5px solid var(--border-med);
+  border-radius: 40px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12px; font-weight: 600; color: var(--text);
+  cursor: pointer; text-decoration: none;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.08);
+  transition: background 0.18s, border-color 0.18s, transform 0.18s;
+  white-space: nowrap;
+}
+.fab:hover { background: var(--orange-light); border-color: var(--orange-mid); color: var(--orange); transform: translateY(-1px); }
+
+@media (max-width: 760px) {
+  .content-grid {
+    grid-template-columns: 1fr;
+  }
+  .edition-tabs { border-right: none; border-bottom: 0.5px solid var(--border-med); }
+  .edition-tab {
+    min-height: 96px;
+    padding: 0.7rem 0.8rem;
+    align-items: center;
+  }
+  .edition-tab.active { border-right: none; }
+  .edition-tab-tag { font-size: 8px; letter-spacing: 0.14em; }
+  .edition-tab-title {
+    font-size: clamp(12px, 2.8vw, 16px);
+    -webkit-line-clamp: 2;
+  }
+  .edition-content { min-height: 0; padding: 2rem 1.25rem 2.5rem; }
+  .edition-content-body {
+    column-count: 1;
+    column-gap: 0;
+    column-rule: none;
+  }
+  .edition-content-text { font-size: 16px; }
+  .edition-content-headline { margin-bottom: 0.85rem; }
+}
+@media (max-width: 520px) {
+  .main { padding: 3rem 1.25rem 9rem; }
+  .botc-float { bottom: 1rem; left: 1rem; }
+  .fab-group { bottom: 1rem; right: 1rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero-section">
+  <canvas class="hero-dot-grid" aria-hidden="true"></canvas>
+  <p class="hero-eyebrow">The Online Newspaper of Edison Academy Magnet School</p>
+  <h1 class="hero-title">The Eagle Eye<span class="let">let</span></h1>
+
+  <div class="search-outer">
+    <div class="search-wrap">
+      <svg class="search-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8">
+        <circle cx="8.5" cy="8.5" r="5.5"/><path d="M15 15l-3-3"/>
+      </svg>
+      <input id="search-input" type="text" placeholder="Search articles, poems, editions…" autocomplete="off">
+    </div>
+    <div id="search-results"></div>
+  </div>
+</section>
+
+<!-- MAIN -->
+<main class="main" id="content">
+
+  <div class="edition-header">
+    <span class="edition-label">Edition #1</span>
+    <span class="edition-date">April 26, 2026</span>
+    <div class="edition-line"></div>
+  </div>
+
+  <div class="content-grid">
+    <div class="edition-tabs" id="edition-tabs" role="tablist">
+      <button class="edition-tab active" type="button" role="tab" data-idx="0" aria-selected="true"></button>
+      <button class="edition-tab" type="button" role="tab" data-idx="1" aria-selected="false"></button>
+      <button class="edition-tab" type="button" role="tab" data-idx="2" aria-selected="false"></button>
+    </div>
+    <div class="edition-content" id="edition-content" role="tabpanel"></div>
+  </div>
+
+</main>
+
+<footer>
+  <p class="footer-logo">The Eagle Eye<span>let</span></p>
+  <p>The Online Newspaper of Edison Academy Magnet School &nbsp;·&nbsp; Edison, NJ</p>
+  <p style="margin-top:0.3rem;">© 2026 Eagle Eyelet Staff</p>
+</footer>
+
+<!-- BOTC FLOAT (bottom-left) -->
+<div class="botc-float">
+  <div class="botc-lb-card">
+    <div class="botc-title-row">
+      <div class="botc-dot"></div>
+      <span class="title-text"><span>BOTC</span> &nbsp;Leaderboard</span>
+    </div>
+    <div class="lb-rows">
+      <div class="lb-row">
+        <span class="lb-rank gold">1</span>
+        <span class="lb-name">Class of '27</span>
+        <span class="lb-val">1,240</span>
+      </div>
+      <div class="lb-row">
+        <span class="lb-rank">2</span>
+        <span class="lb-name">Class of '29</span>
+        <span class="lb-val">1,105</span>
+      </div>
+      <div class="lb-row">
+        <span class="lb-rank">3</span>
+        <span class="lb-name">Class of '26</span>
+        <span class="lb-val">980</span>
+      </div>
+      <div class="lb-row">
+        <span class="lb-rank">4</span>
+        <span class="lb-name">Class of '28</span>
+        <span class="lb-val">870</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="botc-games-panel">
+    <div class="botc-earn-pill">EARN BOTC!</div>
+    <div class="botc-game-buttons">
+      <button class="bgame-btn wordle" onclick="window.open('about:blank','_blank')">
+        🟩 Wordle <span class="btn-pts">+50 pts</span>
+      </button>
+      <button class="bgame-btn connections" onclick="window.open('about:blank','_blank')">
+        🟪 Connections <span class="btn-pts">+45 pts</span>
+      </button>
+      <button class="bgame-btn strands" onclick="window.open('about:blank','_blank')">
+        🧵 Strands <span class="btn-pts">+40 pts</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- FABs (bottom-right) -->
+<div class="fab-group">
+  <a class="fab" href="about:blank" target="_blank">
+    <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8">
+      <rect x="3" y="4" width="14" height="13" rx="1.5"/><path d="M7 8h6M7 11h4"/>
+    </svg>
+    Past Editions
+  </a>
+  <a class="fab" href="about:blank" target="_blank">
+    <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8">
+      <path d="M10 13V4M6 8l4-5 4 5"/><path d="M4 16h12"/>
+    </svg>
+    Submit
+  </a>
+</div>
+
+<script>
+const searchData = [
+  { tag: 'News', title: 'The Snow Problem', author: 'By John Doe' },
+  { tag: 'Opinion', title: "Why I'm Opting for Staycation This Spring Break", author: 'By Jane Doe' },
+  { tag: 'Poem', title: 'Generation Wembley', author: 'By Jack Doe' },
+  { tag: 'BOTC Game', title: 'Wordle — +50 pts' },
+  { tag: 'BOTC Game', title: 'Connections — +45 pts' },
+  { tag: 'BOTC Game', title: 'Strands — +40 pts' },
+];
+
+const editionItems = [
+  {
+    tag: 'News',
+    title: 'The Snow Problem',
+    author: 'By John Doe',
+    content: [
+      "We're having a massive snow problem. No, not like the Hunger Games; more like the weather. All around the globe, snowfall is declining rapidly as temperatures and pollution increase.",
+      'While data shows more extreme winter storms and increased snowfall in some parts of the globe, it is likely that there will be far fewer of these years and eventually, none at all. In fact, ever since 1972, snowfall has declined 2.7% globally, especially in the Northern Hemisphere.',
+      'While some may be rejoicing at the lack of shoveling, snow is critical for our environment because it stores water as snow during "wet times" and releases it when water is harder to come by, according to University of Washington environmental engineering professor Jessica Lundquist. This snowpack was actually found to provide over 50% of the water supply in the western United States. A 2015 study found that 2 billion people who rely on this melting snow for water face declines of up to 67% in areas of Asia, the Mediterranean, and parts of North Africa. This challenge is not as pronounced all around the globe, but in areas like the American Midwest, the impact will be detrimental.',
+      'In order to combat the detrimental effects of this change, researchers in Yosemite are using aerial imagery to map these snow patches and determine their cruciality to the environment as well as how water resources should be shifted to better suit the climate.',
+      "While this issue certainly cannot be tackled by individual citizens alone, everyone must do their part to make sustainable choices when possible: it is the only way to tackle this lack of snow. Don't be surprised if we go without a snow day again this school year."
+    ]
+  },
+  {
+    tag: 'Opinion',
+    title: "Why I'm Opting for Staycation This Spring Break",
+    author: 'By Jane Doe',
+    content: [
+      "Somewhere along the way, spring break stopped being a break and turned into a performance. It feels like everyone is posting airport selfies, beach clips, and color-coded itineraries, and if your week doesn't look like a travel montage, it can seem like you're doing it wrong.",
+      "This year I'm skipping that pressure and choosing a staycation on purpose. Not because travel is bad, but because I don't need to spend half my break waking up at 4 a.m., waiting in lines, and rushing from one activity to the next just to say I went somewhere.",
+      'A staycation gives me something that trips rarely do: actual rest. I can sleep, catch up on books I never finish during the semester, spend time with family, and still have room for the random things school life pushes aside, like trying a recipe, biking nearby trails, or just taking a day offline.',
+      "There's also the money factor. Flights, hotels, and meals out add up quickly, and pretending they don't can create unnecessary stress for families. Staying local doesn't mean doing nothing; it means choosing experiences that fit your life instead of forcing your life to fit the trend.",
+      'For me, spring break is successful if I return recharged, not if I return with the most dramatic photo dump. A quieter week at home may not look exciting on social media, but it feels a lot more like the break we actually need.'
+    ]
+  },
+  {
+    tag: 'Poem',
+    title: 'Generation Wembley',
+    author: 'By Jack Doe',
+    content: [
+      'In 2010 the dream went silent,',
+      'boots heavy in a rain-dark lane,',
+      "the night wrote Inter in iron letters,",
+      'and every scarf remembered pain.',
+      '',
+      'Years moved on like winter stations,',
+      'cold platforms, echo, distant light;',
+      'still we carried songs half-broken,',
+      'still we kept the red and white.',
+      '',
+      'Then came children raised on reruns,',
+      'on stories told instead of seen,',
+      'Generation Wembley, restless,',
+      'learning what belief can mean.',
+      '',
+      'Not a miracle, not one moment,',
+      'but thousand passes, patient fire,',
+      'backs against the noise of doubters,',
+      'hearts that climbed a little higher.',
+      '',
+      'If you ask us why we stayed here,',
+      'why we sang through every scar,',
+      "it's because a dream once broken",
+      'still can know exactly who you are.'
+    ]
+  }
+];
+
+const sinput = document.getElementById('search-input');
+const sresults = document.getElementById('search-results');
+const heroSection = document.querySelector('.hero-section');
+const heroDotGrid = document.querySelector('.hero-dot-grid');
+const botcFloat = document.querySelector('.botc-float');
+const editionTabs = Array.from(document.querySelectorAll('.edition-tab'));
+const editionContent = document.getElementById('edition-content');
+const contentSection = document.getElementById('content');
+let setHeroGridSearching = () => {};
+let currentSearchHits = [];
+
+function initHeroDotGrid() {
+  if (!heroSection || !heroDotGrid) return;
+  const ctx = heroDotGrid.getContext('2d');
+  if (!ctx) return;
+
+  const state = {
+    width: 0,
+    height: 0,
+    dpr: 1,
+    pointerX: 0,
+    pointerY: 0,
+    pointerInside: false,
+    searchFadeProgress: 0,
+    searchFadeTarget: 0,
+    searchFadeFrom: 0,
+    searchFadeStartMs: 0,
+    searchFadeDurationMs: 2200,
+    rafId: 0
+  };
+  const settings = {
+    gap: 28,
+    baseRadius: 1.15,
+    maxRadius: 2.35,
+    influenceRadius: 180
+  };
+
+  function draw(nowMs) {
+    state.rafId = 0;
+    if (state.searchFadeProgress !== state.searchFadeTarget) {
+      const elapsed = Math.max(0, nowMs - state.searchFadeStartMs);
+      const t = Math.min(1, elapsed / state.searchFadeDurationMs);
+      const eased = 1 - Math.pow(1 - t, 3);
+      state.searchFadeProgress = state.searchFadeFrom + ((state.searchFadeTarget - state.searchFadeFrom) * eased);
+      if (t === 1) {
+        state.searchFadeProgress = state.searchFadeTarget;
+      }
+    }
+
+    ctx.clearRect(0, 0, state.width, state.height);
+    const xStart = settings.gap * 0.5;
+    const yStart = settings.gap * 0.5;
+    const fadeEdgeSoftness = 100;
+    const fadeLine = ((1 - state.searchFadeProgress) * (state.height + fadeEdgeSoftness)) - fadeEdgeSoftness;
+
+    for (let y = yStart; y < state.height; y += settings.gap) {
+      for (let x = xStart; x < state.width; x += settings.gap) {
+        let t = 0;
+        if (state.pointerInside) {
+          const dx = x - state.pointerX;
+          const dy = y - state.pointerY;
+          const dist = Math.sqrt((dx * dx) + (dy * dy));
+          t = Math.max(0, 1 - (dist / settings.influenceRadius));
+        }
+        const radius = settings.baseRadius + ((settings.maxRadius - settings.baseRadius) * t * t);
+        const tint = t * 0.9;
+        const r = Math.round(26 + ((232 - 26) * tint));
+        const g = Math.round(26 + ((133 - 26) * tint));
+        const b = Math.round(24 + ((10 - 24) * tint));
+        let alpha = 0.16 + (0.24 * t);
+        if (state.searchFadeProgress > 0) {
+          const linearKeep = Math.max(0, Math.min(1, ((fadeLine - y) / fadeEdgeSoftness) + 0.5));
+          alpha *= linearKeep;
+        }
+        ctx.beginPath();
+        ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${alpha.toFixed(3)})`;
+        ctx.arc(x, y, radius, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    if (state.searchFadeProgress !== state.searchFadeTarget) {
+      requestDraw();
+    }
+  }
+
+  function requestDraw() {
+    if (!state.rafId) {
+      state.rafId = window.requestAnimationFrame((ts) => draw(ts));
+    }
+  }
+
+  function resizeCanvas() {
+    const rect = heroSection.getBoundingClientRect();
+    const nextWidth = Math.max(1, Math.floor(rect.width));
+    const nextHeight = Math.max(1, Math.floor(rect.height));
+    const nextDpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
+    state.width = nextWidth;
+    state.height = nextHeight;
+    state.dpr = nextDpr;
+
+    heroDotGrid.width = Math.floor(nextWidth * nextDpr);
+    heroDotGrid.height = Math.floor(nextHeight * nextDpr);
+    ctx.setTransform(nextDpr, 0, 0, nextDpr, 0, 0);
+    requestDraw();
+  }
+
+  heroSection.addEventListener('pointermove', (event) => {
+    const rect = heroSection.getBoundingClientRect();
+    state.pointerInside = true;
+    state.pointerX = event.clientX - rect.left;
+    state.pointerY = event.clientY - rect.top;
+    requestDraw();
+  });
+
+  heroSection.addEventListener('pointerleave', () => {
+    state.pointerInside = false;
+    requestDraw();
+  });
+
+  window.addEventListener('resize', resizeCanvas);
+
+  setHeroGridSearching = (isSearching) => {
+    const nextTarget = isSearching ? 1 : 0;
+    if (nextTarget !== state.searchFadeTarget) {
+      state.searchFadeFrom = state.searchFadeProgress;
+      state.searchFadeTarget = nextTarget;
+      state.searchFadeStartMs = performance.now();
+    }
+    requestDraw();
+  };
+
+  resizeCanvas();
+}
+
+function escapeHtml(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+function editionTabMarkup(item) {
+  if (!item) return '';
+  return (
+    '<span class="edition-tab-inner">' +
+      '<span class="edition-tab-tag">' + escapeHtml(item.tag) + '</span>' +
+      '<span class="edition-tab-title">' + escapeHtml(item.title) + '</span>' +
+      '<span class="edition-tab-author">' + escapeHtml(item.author || 'By Eagle Eyelet Staff') + '</span>' +
+    '</span>'
+  );
+}
+
+function syncEditionTabs() {
+  editionTabs.forEach((tab, i) => {
+    const item = editionItems[i];
+    tab.innerHTML = editionTabMarkup(item);
+    tab.setAttribute('aria-label', item ? item.tag + ': ' + item.title : '');
+  });
+}
+
+function updateSearchState() {
+  const isSearching = Boolean(sinput.value.trim());
+  heroSection.classList.toggle('search-active', isSearching);
+  setHeroGridSearching(isSearching);
+}
+
+function renderEdition(index) {
+  const current = editionItems[index];
+  editionTabs.forEach((tab, i) => {
+    tab.classList.toggle('active', i === index);
+    tab.setAttribute('aria-selected', i === index ? 'true' : 'false');
+    tab.setAttribute('tabindex', i === index ? '0' : '-1');
+  });
+  const paragraphs = Array.isArray(current.content) ? current.content : [current.content];
+  const isPoem = String(current.tag).toLowerCase() === 'poem';
+  const articleBody = paragraphs.map((line) => {
+    if (!line.trim()) {
+      return isPoem
+        ? '<div class="poem-stanza-break" aria-hidden="true"></div>'
+        : '<p class="edition-content-text">&nbsp;</p>';
+    }
+    return '<p class="edition-content-text">' + escapeHtml(line) + '</p>';
+  }).join('');
+  editionContent.innerHTML =
+    '<article class="edition-content-wrap' + (isPoem ? ' poem-layout' : '') + '">' +
+      '<p class="edition-content-meta">' + escapeHtml(current.tag) + '</p>' +
+      '<h2 class="edition-content-headline">' + escapeHtml(current.title) + '</h2>' +
+      '<p class="edition-content-author">' + escapeHtml(current.author || 'By Eagle Eyelet Staff') + '</p>' +
+      '<div class="edition-content-body">' + articleBody + '</div>' +
+    '</article>';
+}
+
+function getEditionIndexForSearchItem(item) {
+  return editionItems.findIndex((editionItem) =>
+    editionItem.title === item.title && editionItem.tag === item.tag
+  );
+}
+
+syncEditionTabs();
+renderEdition(0);
+initHeroDotGrid();
+
+if (botcFloat) {
+  botcFloat.addEventListener('mouseenter', () => {
+    document.body.classList.add('leaderboard-hover');
+  });
+  botcFloat.addEventListener('mouseleave', () => {
+    document.body.classList.remove('leaderboard-hover');
+  });
+}
+
+editionTabs.forEach((tab, index) => {
+  tab.addEventListener('click', () => renderEdition(index));
+});
+
+sinput.addEventListener('input', () => {
+  const q = sinput.value.trim().toLowerCase();
+  if (!q) {
+    sresults.classList.remove('visible');
+    sresults.innerHTML = '';
+    currentSearchHits = [];
+    updateSearchState();
+    return;
+  }
+  const hits = searchData.filter(d =>
+    d.title.toLowerCase().includes(q) ||
+    d.tag.toLowerCase().includes(q) ||
+    String(d.author || '').toLowerCase().includes(q)
+  );
+  currentSearchHits = hits;
+  const itemMarkup = (m, index) =>
+    `<div class="sr-item" role="button" tabindex="0" data-hit-index="${index}">
+      <span class="sr-tag">${escapeHtml(m.tag)}</span>
+      <span class="sr-title-wrap">
+        <span class="sr-title">${escapeHtml(m.title)}</span>
+        ${m.author ? `<span class="sr-author">${escapeHtml(m.author)}</span>` : ''}
+      </span>
+    </div>`;
+  const linearResultsMarkup = hits.map(itemMarkup).join('<div class="sr-divider"></div>');
+  const gridResultsMarkup = hits.map(itemMarkup).join('');
+  sresults.innerHTML = hits.length
+    ? '<div class="sr-header">Results</div>' +
+      (hits.length >= 4
+        ? `<div class="sr-grid">${gridResultsMarkup}</div>`
+        : linearResultsMarkup)
+    : '<div class="sr-empty">No results found</div>';
+  sresults.classList.add('visible');
+  updateSearchState();
+});
+
+sresults.addEventListener('click', (event) => {
+  const resultItem = event.target.closest('.sr-item');
+  if (!resultItem) return;
+  const hitIndex = Number(resultItem.dataset.hitIndex);
+  if (!Number.isInteger(hitIndex) || hitIndex < 0) return;
+  const selectedHit = currentSearchHits[hitIndex];
+  if (!selectedHit) return;
+
+  const editionIndex = getEditionIndexForSearchItem(selectedHit);
+  if (editionIndex !== -1) {
+    renderEdition(editionIndex);
+    if (contentSection) {
+      contentSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
+
+  sresults.classList.remove('visible');
+  sinput.blur();
+  updateSearchState();
+});
+
+sresults.addEventListener('keydown', (event) => {
+  if (event.key !== 'Enter' && event.key !== ' ') return;
+  const resultItem = event.target.closest('.sr-item');
+  if (!resultItem) return;
+  event.preventDefault();
+  resultItem.click();
+});
+
+document.addEventListener('click', e => {
+  if (!e.target.closest('.search-outer')) {
+    sresults.classList.remove('visible');
+    updateSearchState();
+  }
+});
+sinput.addEventListener('focus', updateSearchState);
+sinput.addEventListener('blur', () => {
+  setTimeout(updateSearchState, 0);
+});
+sinput.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    sresults.classList.remove('visible');
+    sinput.blur();
+    updateSearchState();
+  }
+});
+</script>
+</body>
+</html>
