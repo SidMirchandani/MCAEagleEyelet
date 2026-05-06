@@ -1212,7 +1212,8 @@ body {
     border-radius: 0;
     transform: none;
     transition: opacity 0.2s ease;
-    overflow: hidden;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
   }
 
   .reader-panel.open {
@@ -1220,8 +1221,8 @@ body {
   }
 
   .reader-shell {
-    height: 100%;
-    overflow: hidden;
+    min-height: 100%;
+    overflow: visible;
     position: relative;
     display: flex;
     flex-direction: column;
@@ -1230,13 +1231,8 @@ body {
   .reader-content {
     flex: 1;
     min-height: 0;
-    overflow-y: scroll;
-    overflow-x: hidden;
-    overscroll-behavior: contain;
+    overflow: visible;
     padding-bottom: 1.25rem;
-    -webkit-overflow-scrolling: touch;
-    touch-action: pan-y;
-    position: relative;
   }
   .submit-modal {
     width: calc(100vw - 1rem);
