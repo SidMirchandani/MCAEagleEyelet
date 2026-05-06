@@ -900,6 +900,44 @@ body {
   color: #6b6b66;
 }
 
+.game-external-panel {
+  display: none;
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  padding: 1.1rem 1rem;
+  box-sizing: border-box;
+  place-content: center;
+  text-align: center;
+  gap: 0.55rem;
+  background: linear-gradient(180deg, #faf9f6 0%, #f0efe9 100%);
+}
+
+.game-link-modal--external .game-external-panel {
+  display: grid;
+}
+
+.game-link-modal--external .game-frame {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.game-external-panel .game-external-title {
+  margin: 0;
+  font-family: "Playfair Display", serif;
+  font-size: 1.05rem;
+  color: #1d1d1a;
+}
+
+.game-external-panel .game-external-copy {
+  margin: 0;
+  font-size: 0.82rem;
+  line-height: 1.45;
+  color: #51514d;
+  max-width: 26rem;
+  justify-self: center;
+}
+
 .app-card small {
   font-family: "Montserrat", sans-serif;
   font-size: 0.78rem;
@@ -1172,7 +1210,7 @@ body {
             <span>Connections</span>
             <small>+45 pts</small>
           </a>
-          <a class="app-card strands" data-game="Strands" href="https://strandsgame.io/" aria-label="Open Strands app">
+          <a class="app-card strands" data-game="Strands" href="https://strandsgame.net/" aria-label="Open Strands app">
             <span>Strands</span>
             <small>+40 pts</small>
           </a>
@@ -1238,7 +1276,7 @@ body {
   <nav class="mobile-bottom-games" aria-label="BOTC games">
     <a class="mobile-game-link wordle" data-game="Wordle" href="https://wordleplay.com/" aria-label="Open Wordle app">Wordle<small>+50 pts</small></a>
     <a class="mobile-game-link connections" data-game="Connections" href="https://connectionsplus.io/" aria-label="Open Connections app">Connections<small>+45 pts</small></a>
-    <a class="mobile-game-link strands" data-game="Strands" href="https://strandsgame.io/" aria-label="Open Strands app">Strands<small>+40 pts</small></a>
+    <a class="mobile-game-link strands" data-game="Strands" href="https://strandsgame.net/" aria-label="Open Strands app">Strands<small>+40 pts</small></a>
   </nav>
 
 <script>
@@ -1597,6 +1635,16 @@ formatButtons.forEach((button) => {
   });
 });
 
+/** NYT and similar sites send X-Frame-Options / CSP that block iframe embeds. */
+function gameUrlBlocksIframe(url) {
+  try {
+    const host = new URL(url).hostname.toLowerCase();
+    return host === "nytimes.com" || host.endsWith(".nytimes.com");
+  } catch {
+    return false;
+  }
+}
+
 function openGameModal(gameName, url) {
   gameLinkTitle.textContent = `${gameName}`;
   gameLoading.classList.remove("hidden");
@@ -1631,9 +1679,14 @@ function closeGameModal() {
 
 gameLaunchLinks.forEach((link) => {
   link.addEventListener("click", (event) => {
+    const url = link.href;
+    if (gameUrlBlocksIframe(url)) {
+      event.preventDefault();
+      window.open(url, "_blank", "noopener,noreferrer");
+      return;
+    }
     event.preventDefault();
     const gameName = link.dataset.game || "Game";
-    const url = link.href;
     openGameModal(gameName, url);
   });
 });
