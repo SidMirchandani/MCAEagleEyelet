@@ -7,99 +7,187 @@
 <link rel="icon" type="image/png" href="favicon.png?v=2">
 <link rel="apple-touch-icon" href="favicon.png?v=2">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
 :root {
   --orange: #E8850A;
-  --orange-light: #FDF3E3;
   --orange-mid: #F5A832;
+  --orange-light: #FDF3E3;
   --purple: #7A56D6;
+  --blue: #4A80D9;
+  --teal: #2A9D8F;
   --text: #1A1A18;
   --text-muted: #6B6B66;
   --text-faint: #9E9E98;
-  --border: rgba(0,0,0,0.08);
-  --border-med: rgba(0,0,0,0.14);
+  --border: rgba(0, 0, 0, 0.12);
   --bg: #FAFAF8;
-  --panel-gray: #F2F2F2;
   --surface: #FFFFFF;
-  --search-col-width: 340px;
+  --shadow-soft: 0 16px 40px rgba(20, 20, 18, 0.1);
+  --shadow-card: 0 22px 44px rgba(10, 10, 8, 0.12);
+  --mobile-ticker-height: 62px;
 }
-
-html { scroll-behavior: smooth; }
 
 body {
-  font-family: 'Montserrat', sans-serif;
-  background: var(--bg);
+  font-family: "Montserrat", sans-serif;
   color: var(--text);
-  font-size: 16px;
-  line-height: 1.65;
-}
-body > * {
-  transition: filter 0.45s ease;
-}
-body.leaderboard-hover .hero-section,
-body.leaderboard-hover .main,
-body.leaderboard-hover footer,
-body.leaderboard-hover .fab-group {
-  filter: blur(4px);
-}
-body.past-editions-active .hero-section,
-body.past-editions-active .main,
-body.past-editions-active footer {
-  filter: blur(4px);
-}
-
-/* HERO — full viewport */
-.hero-section {
+  background: var(--bg);
   height: 100vh;
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  text-align: center;
-  padding: 0 2.5rem;
-  position: relative;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  background: radial-gradient(circle at 16% -12%, #ffffff 0%, #f4f6fb 35%, #eef1f7 72%, #e7ebf3 100%);
   overflow: hidden;
-  --cursor-energy: 0;
-  border-bottom: 0.5px solid var(--border-med);
-  transition: background-color 0.3s ease, filter 0.45s ease;
 }
-.hero-section.search-active {
-  background-color: var(--bg);
-}
-.hero-section > *:not(.hero-dot-grid) {
-  position: relative;
-  z-index: 2;
-}
-.hero-dot-grid {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 1;
-  opacity: 0.95;
-}
-.hero-eyebrow {
-  font-size: 10px; font-weight: 600; letter-spacing: 0.2em;
-  text-transform: uppercase; color: var(--text-faint);
-  margin-bottom: 1.5rem;
-}
-.hero-title {
-  font-family: 'Montserrat', sans-serif;
-  font-size: clamp(54px, 9vw, 96px);
-  font-weight: 300; letter-spacing: -0.04em;
-  line-height: 1.0; color: var(--text);
-  margin-bottom: 1.4rem;
-}
-.hero-title .let { color: var(--orange); font-weight: 600; }
 
-/* Search */
-.search-outer {
-  position: relative; width: 380px; max-width: 90vw; z-index: 50;
+.botc-mini-strip {
+  position: fixed;
+  top: 0.7rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 70;
+  width: min(1080px, calc(100vw - 1.2rem));
+  border-radius: 999px;
+  padding: 0.48rem 0.8rem;
+  border: 1px solid rgba(255, 255, 255, 0.84);
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(18px);
+  box-shadow: var(--shadow-soft);
+  display: none;
+  align-items: center;
+  overflow: hidden;
 }
+
+.mini-ticker-track {
+  display: flex;
+  align-items: center;
+  gap: 2.4rem;
+  white-space: nowrap;
+  width: max-content;
+}
+
+.mini-ticker-item {
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: #2f2f2c;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.mini-ticker-item strong {
+  color: var(--orange);
+  font-variant-numeric: tabular-nums;
+  font-size: 0.98rem;
+}
+
+.mini-rank {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  background: linear-gradient(145deg, #f7b553 0%, #E8850A 100%);
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 800;
+  box-shadow: 0 6px 14px rgba(232, 133, 10, 0.3);
+}
+
+.mini-rank.rank-1 {
+  background: linear-gradient(145deg, #f6d77c 0%, #d9a31a 100%);
+  box-shadow: 0 6px 14px rgba(205, 156, 25, 0.35);
+}
+
+.mini-rank.rank-2 {
+  background: linear-gradient(145deg, #e8ebf1 0%, #9ea6b4 100%);
+  box-shadow: 0 6px 14px rgba(129, 136, 148, 0.28);
+}
+
+.mini-rank.rank-3 {
+  background: linear-gradient(145deg, #ddb28f 0%, #9d6642 100%);
+  box-shadow: 0 6px 14px rgba(132, 82, 55, 0.28);
+}
+
+.mini-rank.rank-4 {
+  background: linear-gradient(145deg, #67b8ff 0%, #2f80ed 100%);
+  box-shadow: 0 6px 14px rgba(47, 128, 237, 0.35);
+}
+
+.mini-ticker-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: linear-gradient(180deg, #ffa534, #E8850A);
+  box-shadow: 0 0 0 4px rgba(232, 133, 10, 0.13);
+}
+
+@keyframes ticker-scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.shell {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 1.2rem 1.2rem 1.2rem;
+  height: 100%;
+}
+
+.desktop-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  grid-template-rows: auto minmax(0, 1fr);
+  gap: 1.2rem 1.4rem;
+  height: 100%;
+  min-height: 0;
+}
+
+.topbar {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.85rem;
+  padding: 0.9rem 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.topbar-main {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  width: 100%;
+}
+
+.topbar-search {
+  display: flex;
+  justify-content: stretch;
+  width: 100%;
+}
+
+/* Search — full width of article column (matches .edition-panel track) */
+.search-outer {
+  position: relative;
+  width: 100%;
+  z-index: 50;
+}
+
 .search-wrap {
-  display: flex; align-items: center;
+  display: flex;
+  align-items: center;
   border: 1px solid var(--orange-mid);
   border-radius: 40px;
   padding: 0 1.25rem;
@@ -107,1632 +195,1467 @@ body.past-editions-active footer {
   background: var(--surface);
   box-shadow: 0 0 0 5px var(--orange-light);
   transition: box-shadow 0.25s;
-  position: relative; z-index: 2;
+  position: relative;
+  z-index: 2;
 }
-.search-wrap:focus-within { box-shadow: 0 0 0 8px var(--orange-light); }
-.search-icon { color: var(--text-faint); flex-shrink: 0; margin-right: 10px; width:15px; height:15px; }
+
+.search-wrap:focus-within {
+  box-shadow: 0 0 0 8px var(--orange-light);
+}
+
+.search-icon {
+  color: var(--text-faint);
+  flex-shrink: 0;
+  margin-right: 10px;
+  width: 15px;
+  height: 15px;
+}
+
 .search-wrap input {
-  border: none; outline: none; background: transparent;
-  font-family: 'Montserrat', sans-serif; font-size: 13px;
-  color: var(--text); width: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: "Montserrat", sans-serif;
+  font-size: 13px;
+  color: var(--text);
+  width: 100%;
   caret-color: var(--orange);
 }
-.search-wrap input::placeholder { color: var(--text-faint); }
 
-/* Search results — free-floating, fades above content */
-#search-results {
-  position: absolute; top: calc(100% + 14px); left: 50%; transform: translateX(-50%) translateY(8px);
-  width: fit-content; max-width: 92vw;
-  background: var(--bg);
-  border: none;
-  border-radius: 0;
-  padding: 8px 0;
-  opacity: 0; visibility: hidden; pointer-events: none;
-  z-index: 100;
-  box-shadow: 0 16px 48px var(--bg);
-  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
-}
-#search-results.visible {
-  opacity: 1; visibility: visible; pointer-events: auto;
-  transform: translateX(-50%) translateY(0);
+.search-wrap input::placeholder {
+  color: var(--text-faint);
 }
 
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateX(-50%) translateY(8px); }
-  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+.brand-title {
+  font-size: clamp(1.7rem, 4vw, 2.5rem);
+  font-weight: 300;
+  letter-spacing: -0.03em;
 }
 
-.sr-header {
-  font-size: 9px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase;
-  color: var(--text-faint); padding: 8px 20px 6px;
-  background: transparent;
-}
-.sr-item {
-  display: flex; align-items: center; gap: 12px;
-  padding: 10px 20px; cursor: pointer;
-  background: var(--bg);
-  transition: background 0.12s;
-  width: min(var(--search-col-width), 92vw);
-}
-.sr-item:hover { background: #ECECEA; }
-.sr-grid {
-  display: grid;
-  grid-auto-flow: column;
-  grid-auto-columns: var(--search-col-width);
-  grid-template-rows: repeat(3, auto);
-  max-width: 92vw;
-  overflow-x: auto;
-  overflow-y: hidden;
-}
-.sr-grid .sr-item {
-  min-width: 0;
-}
-.sr-tag {
-  font-size: 9px; font-weight: 700; letter-spacing: 0.12em;
-  text-transform: uppercase; color: var(--orange);
-  background: var(--orange-light); padding: 2px 8px; border-radius: 20px;
-  white-space: nowrap; flex-shrink: 0;
-}
-.sr-title {
-  display: block;
-  flex: 1;
-  text-align: left;
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--text);
-  line-height: 1.3;
-}
-.sr-title-wrap {
-  display: flex;
-  flex: 1;
-  min-width: 0;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 2px;
-}
-.sr-author {
-  font-size: 11px;
-  color: var(--text-muted);
-  font-style: italic;
-  line-height: 1.2;
-}
-.sr-empty {
-  padding: 20px; font-size: 13px; color: var(--text-faint);
-  text-align: center; font-style: italic; background: var(--bg);
-}
-.sr-divider { height: 6px; background: transparent; margin: 0; }
-
-/* MAIN */
-.main {
-  max-width: 1200px; margin: 0 auto;
-  padding: 4rem 2.5rem 9rem;
-}
-
-.edition-header {
-  display: flex; align-items: center; gap: 1.5rem; margin-bottom: 3rem;
-}
-.edition-label {
-  font-size: 10px; font-weight: 700; letter-spacing: 0.18em;
-  text-transform: uppercase; color: var(--orange);
-  background: var(--orange-light); padding: 5px 14px; border-radius: 20px;
-  white-space: nowrap;
-}
-.edition-date {
-  font-family: 'Playfair Display', serif;
-  font-style: italic; font-size: 14px; color: var(--text-faint); white-space: nowrap;
-}
-.edition-line { flex: 1; height: 0.5px; background: var(--border-med); }
-
-/* Edition layout — left title rail + large reading panel */
-.content-grid {
-  display: grid;
-  grid-template-columns: minmax(220px, 330px) 1fr;
-  align-items: stretch;
-  margin-bottom: 5rem;
-  background: var(--panel-gray);
-  border: 0.5px solid var(--border-med);
-  overflow: hidden;
-}
-.edition-tabs {
-  display: flex;
-  flex-direction: column;
-  align-self: stretch;
-  min-height: 100%;
-  background: var(--panel-gray);
-  border-right: 0.5px solid var(--border-med);
-}
-.edition-tabs::after {
-  content: '';
-  flex: 1;
-  background: var(--panel-gray);
-}
-.edition-tab {
-  border: none;
-  border-bottom: 0.5px solid var(--border-med);
-  background: var(--panel-gray);
-  color: var(--text);
-  min-height: 145px;
-  cursor: pointer;
-  transition: background 0.18s ease, color 0.18s ease;
-  padding: 1.2rem 1.15rem;
-  position: relative;
-  z-index: 0;
-  display: flex;
-  align-items: flex-start;
-  justify-content: flex-start;
-  text-align: left;
-}
-.edition-tab-inner {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 0.65rem;
-  width: 100%;
-  max-width: 100%;
-}
-.edition-tab-tag {
-  display: inline-block;
-  font-family: 'Montserrat', sans-serif;
-  font-size: 9px;
+.brand-title .brand-name {
   font-weight: 700;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
+}
+
+.brand-title .accent {
   color: var(--orange);
-  line-height: 1.2;
-}
-.edition-tab-title {
-  font-family: 'Playfair Display', serif;
-  font-size: clamp(15px, 1.4vw, 21px);
   font-weight: 600;
-  line-height: 1.22;
-  color: var(--text);
-  text-align: left;
-  display: -webkit-box;
-  line-clamp: 5;
-  -webkit-line-clamp: 5;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  width: 100%;
 }
-.edition-tab-author {
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+
+.brand-subtitle {
+  margin-top: 0.2rem;
   color: var(--text-muted);
-  line-height: 1.2;
+  font-size: 0.82rem;
+  letter-spacing: 0.02em;
 }
-.edition-tab:last-child { border-bottom: none; }
-.edition-tab:hover:not(.active) {
-  background: #e8e8e8;
+
+.edition-switcher {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.32rem;
+  min-width: 250px;
+  text-align: center;
+  background: linear-gradient(180deg, rgba(255,255,255,0.84) 0%, rgba(243,247,255,0.82) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  border-radius: 16px;
+  padding: 0.62rem 0.78rem 0.65rem;
+  box-shadow: var(--shadow-soft);
+  backdrop-filter: blur(24px);
 }
-.edition-tab.active {
-  background: var(--surface);
+
+.edition-switcher label {
+  font-size: 0.66rem;
+  text-transform: uppercase;
+  letter-spacing: 0.11em;
+  color: #777771;
+  font-weight: 700;
+  line-height: 1;
+  text-align: center;
+}
+
+.edition-switcher select {
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: rgba(255, 255, 255, 0.95);
+  font-size: 0.95rem;
   color: var(--text);
-  z-index: 1;
-  border-right: 0.5px solid var(--surface);
-  box-shadow: none;
+  font-weight: 700;
+  font-family: "Playfair Display", serif;
+  outline: none;
+  cursor: pointer;
+  border-radius: 12px;
+  padding: 0.5rem 2rem;
+  text-align: center;
+  text-align-last: center;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, #9c9c95 50%), linear-gradient(135deg, #9c9c95 50%, transparent 50%);
+  background-position: calc(100% - 16px) calc(50% - 2px), calc(100% - 10px) calc(50% - 2px);
+  background-size: 6px 6px, 6px 6px;
+  background-repeat: no-repeat;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
 }
-.edition-tab.game-tab {
-  color: #fff;
+
+.edition-switcher select:hover {
+  border-color: rgba(232, 133, 10, 0.45);
+  background-color: #fffdfa;
 }
-.edition-tab.game-tab .edition-tab-tag,
-.edition-tab.game-tab .edition-tab-author,
-.edition-tab.game-tab .edition-tab-title {
-  color: #fff;
+
+.edition-switcher select:focus {
+  border-color: rgba(232, 133, 10, 0.7);
+  box-shadow: 0 0 0 3px rgba(232, 133, 10, 0.14);
 }
-.edition-tab.game-wordle { background: #4A80D9; }
-.edition-tab.game-connections { background: var(--purple); }
-.edition-tab.game-strands { background: #2A9D8F; }
-.edition-tab.game-tab:hover:not(.active) {
-  filter: none;
+
+.edition-switcher select option {
+  background: #ffffff;
+  color: #1f1f1c;
+  font-weight: 700;
 }
-.edition-tab.game-wordle:hover:not(.active) {
-  background: #3666b7;
+
+.edition-panel,
+.botc-panel {
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  border-radius: 24px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.72) 0%, rgba(244,248,255,0.7) 100%);
+  backdrop-filter: blur(26px);
+  box-shadow: var(--shadow-card);
 }
-.edition-tab.game-connections:hover:not(.active) {
-  background: #5f42ad;
-}
-.edition-tab.game-strands:hover:not(.active) {
-  background: #1f7e72;
-}
-.edition-tab.game-tab.active {
-  color: #fff;
-  border-right: none;
-  box-shadow: inset 0 0 0 2px rgba(255,255,255,0.28);
-}
-.edition-content {
-  min-height: 540px;
+
+.edition-panel {
+  grid-column: 1;
+  grid-row: 2;
+  overflow: hidden;
+  position: relative;
   display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  text-align: left;
-  padding: 2.75rem 2.75rem 3.25rem;
-  background: var(--surface);
-  border-top: none;
+  flex-direction: column;
+  min-height: 0;
 }
-.edition-content-wrap {
-  max-width: 980px;
-  width: 100%;
-}
-.edition-content-body {
-  column-count: 1;
-  column-gap: 0;
-  column-rule: none;
-}
-.edition-content-text {
-  font-family: 'Playfair Display', serif;
-  font-size: 17px;
-  line-height: 1.75;
-  color: #2B2B28;
-  margin: 0 0 1rem;
-  text-align: justify;
-  break-inside: avoid;
-  hyphens: auto;
-}
-.edition-content-text:last-child {
-  margin-bottom: 0;
-}
-.edition-content-body .edition-content-text:first-child::first-letter {
-  float: left;
-  font-size: 3.25em;
-  line-height: 0.9;
-  padding-right: 0.07em;
-  padding-top: 0.06em;
-  font-weight: 600;
-  color: var(--text);
-}
-.edition-content-headline {
-  font-family: 'Playfair Display', serif;
-  font-size: clamp(26px, 3vw, 34px);
-  font-weight: 600;
-  line-height: 1.15;
-  color: var(--text);
-  margin-bottom: 1rem;
-}
-.edition-content-meta {
+
+.eyebrow {
   display: inline-block;
-  font-size: 10px;
+  font-size: 0.68rem;
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--orange);
   background: var(--orange-light);
-  padding: 4px 10px;
   border-radius: 999px;
-  margin-bottom: 1.1rem;
+  padding: 0.2rem 0.55rem;
 }
-.edition-content-author {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+
+.edition-title {
+  margin-top: 0.6rem;
+  font-family: "Playfair Display", serif;
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  line-height: 1.2;
+}
+
+.edition-meta {
+  margin-top: 0.35rem;
   color: var(--text-muted);
-  margin: 0 0 1rem;
-}
-.edition-content-text:first-child { margin-top: 0; }
-
-/* Poem presentation */
-.edition-content-wrap.poem-layout .edition-content-body {
-  column-count: 1;
-  column-gap: 0;
-  column-rule: none;
-}
-.edition-content-wrap.poem-layout .edition-content-text {
-  font-size: 22px;
-  line-height: 1.55;
-  text-align: left;
-  margin: 0;
-  break-inside: avoid;
-  hyphens: none;
-}
-.edition-content-wrap.poem-layout .edition-content-body .edition-content-text:first-child::first-letter {
-  float: none;
-  font-size: inherit;
-  line-height: inherit;
-  padding: 0;
-  font-weight: inherit;
-  color: inherit;
-}
-.poem-stanza-break {
-  height: 1.1rem;
+  font-size: 0.92rem;
 }
 
-/* FOOTER */
-footer {
-  border-top: 0.5px solid var(--border-med);
-  padding: 2.5rem; text-align: center;
-}
-.footer-logo {
-  font-family: 'Montserrat', sans-serif;
-  font-size: 20px; font-weight: 300; letter-spacing: -0.02em; margin-bottom: 0.3rem;
-}
-.footer-logo span { color: var(--orange); font-weight: 600; }
-footer p { font-size: 11px; color: var(--text-faint); }
-
-/* ── BOTC FLOAT (bottom-left) ── */
-.botc-float {
-  position: fixed; bottom: 1.75rem; left: 1.75rem; z-index: 500;
-  display: flex; flex-direction: row; align-items: stretch;
-}
-
-/* leaderboard card — always visible */
-.botc-lb-card {
-  background: var(--surface);
-  border: 0.5px solid var(--border-med);
-  border-radius: 14px 0 0 14px;
-  overflow: hidden;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.09);
-  min-width: 220px;
-}
-.botc-title-row {
-  display: flex; align-items: center; gap: 8px;
-  padding: 10px 16px 6px;
-  border-bottom: 0.5px solid var(--border);
-}
-.botc-dot {
-  width: 7px; height: 7px; border-radius: 50%;
-  background: var(--orange); flex-shrink: 0;
-  box-shadow: 0 0 0 3px var(--orange-light);
-}
-.botc-title-row .title-text {
-  font-size: 11px; font-weight: 700; letter-spacing: 0.04em; color: var(--text);
-}
-.botc-title-row .title-text span { color: var(--orange); }
-
-.lb-rows { padding: 6px 16px 10px; }
-.lb-row {
-  display: flex; align-items: center; gap: 8px;
-  padding: 4px 0;
-  font-size: 11px;
-}
-.lb-rank { font-size: 9px; color: var(--text-faint); font-weight: 700; width: 12px; flex-shrink:0; }
-.lb-rank.gold { color: var(--orange); }
-.lb-name { flex: 1; font-weight: 500; }
-.lb-val { font-size: 12px; font-weight: 700; color: var(--orange); }
-
-/* game buttons panel — slides in from the left card */
-.botc-games-panel {
-  position: relative;
-  display: flex; flex-direction: column; justify-content: stretch; gap: 0;
-  background: var(--surface);
-  border: 0.5px solid var(--border-med);
-  border-left: none;
-  border-radius: 0 14px 14px 0;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.09);
-  margin-left: -8px;
-  padding: 0;
-  width: 44px;
-  max-width: 44px; overflow: hidden;
-  transition: max-width 0.38s cubic-bezier(0.4,0,0.2,1), width 0.38s cubic-bezier(0.4,0,0.2,1);
-}
-.botc-float:hover .botc-games-panel {
-  width: 180px;
-  max-width: 180px;
-}
-
-.botc-earn-pill {
-  display: flex; align-items: center; justify-content: center; flex: 1;
-  width: 100%;
-  font-size: 10px; font-weight: 800; letter-spacing: 0.1em;
-  color: var(--orange); text-transform: uppercase;
-  writing-mode: horizontal-tb;
-  transform: rotate(90deg);
-  white-space: nowrap; line-height: 1;
-  opacity: 1;
-  transition: opacity 0.18s ease, visibility 0.18s ease;
-}
-.botc-game-buttons {
-  display: flex; flex-direction: column; gap: 0;
-  position: absolute; inset: 0;
-  opacity: 0; visibility: hidden;
-  transition: opacity 0.2s ease, visibility 0.2s ease;
-}
-.botc-float:hover .botc-earn-pill {
-  opacity: 0; visibility: hidden;
-}
-.botc-float:hover .botc-game-buttons {
-  opacity: 1; visibility: visible;
-}
-
-.bgame-btn {
-  display: flex; align-items: center; justify-content: space-between; gap: 8px;
-  width: 100%; flex: 1;
-  padding: 0 14px;
-  border: none; border-radius: 0;
-  font-family: 'Playfair Display', serif;
-  font-size: 14px; font-weight: 600; color: white;
-  cursor: pointer; white-space: nowrap; text-align: left;
-  transition: filter 0.15s, transform 0.15s;
-  letter-spacing: 0.02em;
-  -webkit-appearance: none;
-  appearance: none;
-}
-.bgame-btn:hover { filter: brightness(1.07); }
-.bgame-btn.wordle { background: #4A80D9; }
-.bgame-btn.strands { background: #2A9D8F; }
-.bgame-btn.connections { background: var(--purple); }
-.bgame-btn.wordle { border-radius: 0 14px 0 0; }
-.bgame-btn.connections { border-radius: 0; }
-.bgame-btn.strands { border-radius: 0 0 14px 0; }
-.bgame-btn .btn-pts {
-  margin-left: auto; font-size: 10px; font-weight: 600;
-  opacity: 0.85;
-}
-
-/* FABs (bottom-right) */
-.fab-group {
-  position: fixed; bottom: 1.75rem; right: 1.75rem; z-index: 500;
-  display: flex; flex-direction: column; gap: 10px; align-items: flex-end;
-}
-.fab {
-  display: flex; align-items: center; gap: 9px;
-  padding: 11px 20px;
-  background: var(--surface);
-  border: 0.5px solid var(--border-med);
-  border-radius: 40px;
-  font-family: 'Montserrat', sans-serif;
-  font-size: 12px; font-weight: 600; color: var(--text);
-  cursor: pointer; text-decoration: none;
-  box-shadow: 0 4px 18px rgba(0,0,0,0.08);
-  transition: background 0.18s, border-color 0.18s, transform 0.18s;
-  white-space: nowrap;
-}
-.fab:hover { background: var(--orange-light); border-color: var(--orange-mid); color: var(--orange); transform: translateY(-1px); }
-
-.past-editions-fab {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 8px;
-  width: fit-content;
-  min-width: max-content;
-}
-#past-editions-toggle {
-  display: inline-flex;
-  opacity: 1;
-  visibility: visible;
-  position: relative;
-  z-index: 2;
-}
-.past-editions-panel {
-  position: absolute;
-  right: 0;
-  bottom: calc(100% + 8px);
-  width: 0;
-  max-width: min(92vw, 340px);
-  opacity: 0;
-  pointer-events: none;
-  overflow: hidden;
-  transition: width 0.24s ease, opacity 0.2s ease;
-}
-.past-editions-fab.open .past-editions-panel {
-  width: min(92vw, 340px);
-  opacity: 1;
-  pointer-events: auto;
-}
-.past-editions-inner {
-  background: var(--surface);
-  border: 0.5px solid var(--border-med);
-  border-radius: 14px;
-  box-shadow: none;
-  padding: 8px 9px;
-}
-.past-edition-list {
-  display: flex;
-  flex-direction: column;
-  gap: 1px;
-}
-.past-edition-btn {
-  border: none;
-  border-radius: 9px;
-  background: transparent;
-  color: var(--text);
-  padding: 8px 10px;
-  font-size: 12px;
-  font-weight: 500;
-  font-family: 'Montserrat', sans-serif;
-  text-align: left;
-  cursor: pointer;
-}
-.past-edition-btn:hover {
-  background: #F3F3F1;
-}
-.past-edition-btn.active {
-  background: #F3F3F1;
-  color: var(--orange);
-}
-.past-edition-btn-main {
-  display: block;
-}
-.past-edition-btn-date {
-  display: block;
-  margin-top: 2px;
-  font-size: 10px;
-  color: var(--text-faint);
-  font-weight: 500;
-}
-
-.past-edition-modal {
-  position: fixed;
-  inset: 0;
-  z-index: 900;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 2rem;
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-  transition: opacity 0.28s ease, visibility 0.28s ease;
-}
-.past-edition-modal.open {
-  opacity: 1;
-  visibility: visible;
-  pointer-events: auto;
-}
-.past-edition-modal-overlay {
-  position: absolute;
-  inset: 0;
-  background: transparent;
-}
-.past-edition-modal-dialog {
-  position: relative;
-  z-index: 2;
-  width: min(95vw, 1180px);
-  max-height: 88vh;
-  background: var(--surface);
-  border: 0.5px solid var(--border-med);
-  border-radius: 18px;
-  box-shadow: 0 18px 60px rgba(0,0,0,0.22);
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  transform: translateY(10px) scale(0.985);
-  opacity: 0;
-  transition: transform 0.28s ease, opacity 0.28s ease;
-}
-.past-edition-modal.open .past-edition-modal-dialog {
-  transform: translateY(0) scale(1);
-  opacity: 1;
-}
-.past-edition-modal-topbar {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  padding: 1rem 1.25rem;
-  border-bottom: 0.5px solid var(--border-med);
-}
-.past-edition-modal-meta {
+.article-list {
+  list-style: none;
+  overflow-y: auto;
   flex: 1;
-  font-family: 'Montserrat', sans-serif;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--orange);
-}
-.past-edition-modal-close {
-  border: 0.5px solid var(--border-med);
-  background: var(--surface);
-  border-radius: 999px;
-  font-family: 'Montserrat', sans-serif;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--text-muted);
-  cursor: pointer;
-  padding: 7px 12px;
-}
-.past-edition-modal-body {
-  overflow: auto;
-  padding: 1rem;
-}
-.past-edition-modal-grid {
-  margin-bottom: 0;
   min-height: 0;
 }
 
-@media (max-width: 1024px) {
-  .content-grid {
+.article {
+  padding: 1.1rem 1.3rem;
+  border-bottom: 1px solid var(--border);
+  transition: background-color 0.22s ease, transform 0.22s ease;
+  cursor: pointer;
+  display: grid;
+  grid-template-columns: 116px minmax(0, 1fr);
+  gap: 0.95rem;
+  align-items: center;
+}
+
+.article:last-child {
+  border-bottom: none;
+}
+
+.article-list-empty {
+  padding: 2rem 1.5rem;
+  text-align: center;
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.article:hover {
+  background: #fcfcfa;
+  transform: scale(0.996);
+}
+
+.article-thumb {
+  width: 116px;
+  height: 96px;
+  border-radius: 14px;
+  object-fit: cover;
+  box-shadow: 0 8px 20px rgba(14, 14, 12, 0.12);
+}
+
+.article-copy h3 {
+  font-size: 1.05rem;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+}
+
+.article-copy p {
+  margin-top: 0.5rem;
+  color: var(--text-muted);
+  font-size: 0.96rem;
+}
+
+.article-meta {
+  margin-top: 0.6rem;
+  font-size: 0.8rem;
+  color: var(--text-faint);
+}
+
+.reader-panel {
+  position: absolute;
+  inset: 0;
+  background: #f9f8f5;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(10px);
+  transition: opacity 0.28s ease, transform 0.28s ease;
+  padding: 0;
+  z-index: 5;
+  overflow: hidden;
+}
+
+.reader-panel.open {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.reader-shell {
+  height: 100%;
+  border: none;
+  border-radius: 0;
+  background: #fbfbf8;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: none;
+  position: relative;
+}
+
+.reader-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-shrink: 0;
+  gap: 0.5rem;
+  padding: 0.55rem 0.75rem 0.6rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  background: linear-gradient(180deg, #ffffff 0%, #f9f8f5 100%);
+}
+
+.reader-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.98);
+  color: #3b3b37;
+  cursor: pointer;
+  box-shadow: 0 2px 10px rgba(20, 20, 18, 0.08);
+  transition: background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.reader-close svg {
+  flex-shrink: 0;
+}
+
+.reader-close:hover {
+  background: #fff;
+  border-color: rgba(232, 133, 10, 0.35);
+  box-shadow: 0 4px 14px rgba(20, 20, 18, 0.12);
+}
+
+.reader-close:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(232, 133, 10, 0.22);
+}
+
+.reader-content {
+  padding: 1.1rem 1.1rem 2rem;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+
+.reader-hero {
+  width: 100%;
+  height: clamp(180px, 30vw, 360px);
+  object-fit: cover;
+  border-radius: 14px;
+  margin-top: 0.95rem;
+  box-shadow: 0 14px 28px rgba(16, 16, 14, 0.18);
+}
+
+.reader-title {
+  font-family: "Playfair Display", serif;
+  font-size: clamp(1.45rem, 2.6vw, 2rem);
+  line-height: 1.2;
+  margin-top: 1rem;
+}
+
+.reader-meta {
+  margin-top: 0.45rem;
+  color: var(--text-muted);
+  font-size: 0.88rem;
+}
+
+.reader-body {
+  margin-top: 1rem;
+  max-width: 68ch;
+}
+
+.reader-body p {
+  font-size: 1.05rem;
+  line-height: 1.86;
+  color: #2a2a28;
+  margin-bottom: 1.15rem;
+}
+
+.botc-panel {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  position: static;
+  overflow: hidden;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.botc-head {
+  padding: 0.95rem 1rem;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.botc-title {
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  text-align: center;
+}
+
+.leaderboard {
+  list-style: none;
+  padding: 0.65rem 0.8rem 0.8rem;
+  background: #f1f1ef;
+  border-radius: 14px;
+  margin: 0.8rem 0.8rem 0.7rem;
+}
+
+.leaderboard li {
+  display: grid;
+  grid-template-columns: 38px 1fr auto;
+  gap: 0.62rem;
+  align-items: center;
+  font-size: 1.02rem;
+  padding: 0.45rem 0;
+}
+
+.leaderboard li span:first-child {
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 800;
+  font-size: 0.88rem;
+  box-shadow: 0 8px 16px rgba(20, 20, 18, 0.18);
+}
+
+.leaderboard li:nth-child(1) span:first-child {
+  background: linear-gradient(145deg, #f6d77c 0%, #d9a31a 100%);
+}
+
+.leaderboard li:nth-child(2) span:first-child {
+  background: linear-gradient(145deg, #e8ebf1 0%, #9ea6b4 100%);
+}
+
+.leaderboard li:nth-child(3) span:first-child {
+  background: linear-gradient(145deg, #ddb28f 0%, #9d6642 100%);
+}
+
+.leaderboard li:nth-child(4) span:first-child {
+  background: linear-gradient(145deg, #67b8ff 0%, #2f80ed 100%);
+}
+
+.leaderboard li strong {
+  color: var(--orange);
+  font-variant-numeric: tabular-nums;
+  font-size: 1.08rem;
+  font-weight: 800;
+}
+
+.apps {
+  border-top: 1px solid var(--border);
+  padding: 0.7rem 0.8rem 0.85rem;
+}
+
+.apps-head {
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 0.62rem;
+  padding-bottom: 0.5rem;
+}
+
+.apps-title {
+  font-size: 1.15rem;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  color: var(--text);
+  font-weight: 800;
+  margin-bottom: 0.62rem;
+  text-align: center;
+}
+
+.app-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-decoration: none;
+  color: #ffffff;
+  font-weight: 700;
+  font-family: "Playfair Display", serif;
+  padding: 0.9rem 1rem;
+  border-radius: 14px;
+  margin-bottom: 0.45rem;
+  box-shadow: 0 8px 18px rgba(16, 16, 14, 0.16);
+}
+
+.mobile-bottom-games { display: none; }
+
+.botc-actions {
+  border-top: 1px solid var(--border);
+  padding: 0.7rem 0.8rem 0.95rem;
+  display: block;
+  margin-top: auto;
+}
+
+.botc-ghost-btn {
+  width: 100%;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 14px;
+  color: #1f1f1c;
+  background: linear-gradient(180deg, #ffffff 0%, #f5f4f1 100%);
+  text-align: center;
+  padding: 0.8rem 0.7rem;
+  font-size: 0.96rem;
+  font-weight: 700;
+  font-family: "Playfair Display", serif;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  box-shadow: 0 8px 18px rgba(16, 16, 14, 0.1);
+}
+
+.submit-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(12, 12, 10, 0.42);
+  backdrop-filter: blur(8px);
+  z-index: 100;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.submit-modal-overlay.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.submit-modal {
+  position: fixed;
+  inset: 50% auto auto 50%;
+  transform: translate(-50%, -48%);
+  width: min(760px, calc(100vw - 1.4rem));
+  background: #f9f8f5;
+  border: 1px solid rgba(255, 255, 255, 0.84);
+  border-radius: 18px;
+  box-shadow: 0 24px 54px rgba(10, 10, 8, 0.3);
+  z-index: 101;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.submit-modal.open {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate(-50%, -50%);
+}
+
+.submit-head {
+  padding: 0.95rem 1rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.submit-head h3 {
+  font-family: "Playfair Display", serif;
+  font-size: 1.2rem;
+}
+
+.submit-close {
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: #fff;
+  border-radius: 10px;
+  padding: 0.4rem 0.6rem;
+  cursor: pointer;
+}
+
+.submit-body {
+  padding: 0.9rem 1rem 1rem;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.submit-field label {
+  display: block;
+  font-size: 0.74rem;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: #74746f;
+  font-weight: 700;
+  margin-bottom: 0.35rem;
+}
+
+.submit-field input {
+  width: 100%;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  background: #fff;
+  padding: 0.6rem 0.7rem;
+  font-size: 0.9rem;
+}
+
+.submit-toolbar {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.tool-btn {
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: #fff;
+  border-radius: 9px;
+  padding: 0.35rem 0.55rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.submit-editor {
+  min-height: 180px;
+  max-height: 260px;
+  overflow: auto;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  background: #fff;
+  padding: 0.75rem;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.submit-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.6rem;
+}
+
+.submit-action {
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: #fff;
+  border-radius: 10px;
+  padding: 0.48rem 0.8rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.submit-action.primary {
+  background: #1d1d1a;
+  color: #fff;
+}
+
+.game-link-modal {
+  position: fixed;
+  inset: 50% auto auto 50%;
+  transform: translate(-50%, -48%);
+  width: min(520px, calc(100vw - 1.2rem));
+  background: #fbfaf7;
+  border: 1px solid rgba(255, 255, 255, 0.84);
+  border-radius: 16px;
+  box-shadow: 0 20px 46px rgba(10, 10, 8, 0.28);
+  z-index: 103;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.game-link-modal.open {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate(-50%, -50%);
+}
+
+.game-link-head {
+  padding: 0.9rem 1rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.game-link-title {
+  font-family: "Playfair Display", serif;
+  font-size: 1.16rem;
+}
+
+.game-link-body {
+  padding: 0.9rem 1rem 1rem;
+}
+
+.game-frame-wrap {
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+  overflow: hidden;
+  background: #fff;
+  height: min(62vh, 520px);
+  position: relative;
+}
+
+.game-frame {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.game-loading {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  gap: 0.6rem;
+  background: rgba(250, 250, 247, 0.92);
+  z-index: 2;
+  transition: opacity 0.2s ease;
+}
+
+.game-loading.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.game-spinner {
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  border: 3px solid rgba(47, 128, 237, 0.22);
+  border-top-color: #2f80ed;
+  animation: spin 0.85s linear infinite;
+}
+
+.game-loading-text {
+  font-size: 0.86rem;
+  color: #51514d;
+  font-weight: 600;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.game-link-actions {
+  margin-top: 0.75rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.game-link-note {
+  font-size: 0.77rem;
+  color: #6b6b66;
+}
+
+.app-card small {
+  font-family: "Montserrat", sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  opacity: 0.85;
+}
+
+.wordle {
+  background: var(--blue);
+}
+
+.connections {
+  background: var(--purple);
+}
+
+.strands {
+  background: var(--teal);
+}
+
+@media (max-width: 980px) {
+  body {
+    height: 100vh;
+    min-height: 100vh;
+    overflow: hidden;
+  }
+
+  .botc-mini-strip {
+    display: flex;
+    top: 0;
+    left: 0;
+    transform: none;
+    width: 100%;
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+    padding: 0.68rem 0.7rem;
+    background: linear-gradient(90deg, rgba(255,255,255,0.95) 0%, rgba(255,249,238,0.97) 100%);
+    border-color: rgba(255, 216, 168, 0.9);
+    min-height: var(--mobile-ticker-height);
+  }
+
+  .mini-ticker-track {
+    animation: ticker-scroll 18s linear infinite;
+  }
+
+  .shell {
+    padding-top: 3.55rem;
+    padding-bottom: 4.9rem;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  .topbar-main {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .brand {
+    text-align: center;
+  }
+
+  .brand-title,
+  .brand-subtitle {
+    text-align: center;
+  }
+
+  .subtitle-school {
+    display: block;
+  }
+
+  .edition-switcher {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .desktop-grid {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 0;
+  }
+
+  .botc-panel {
+    display: none;
+  }
+
+  .reader-panel {
+    position: absolute;
+    inset: 0;
+    padding: 0;
+    z-index: 120;
+    border-radius: 0;
+    transform: none;
+    transition: opacity 0.2s ease;
+    overflow: hidden;
+  }
+
+  .reader-panel.open {
+    transform: none;
+  }
+
+  .reader-content {
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding-bottom: calc(56px + env(safe-area-inset-bottom, 0px) + 1rem);
+  }
+
+  .reader-topbar {
+    position: static;
+    padding: 0.45rem 0.65rem 0.5rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(249, 248, 245, 0.96) 100%);
+  }
+
+  .article {
     grid-template-columns: 1fr;
   }
-  .edition-tabs { border-right: none; border-bottom: 0.5px solid var(--border-med); }
-  .edition-tab {
-    min-height: 96px;
-    padding: 0.7rem 0.8rem;
-    align-items: center;
+
+  .edition-panel {
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
   }
-  .edition-tab.active { border-right: none; }
-  .edition-tab-tag { font-size: 8px; letter-spacing: 0.14em; }
-  .edition-tab-title {
-    font-size: clamp(12px, 2.8vw, 16px);
-    line-clamp: 2;
-    -webkit-line-clamp: 2;
+
+  .article-list {
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
-  .edition-content { min-height: 0; padding: 2rem 1.25rem 2.5rem; }
-  .edition-content-body {
-    column-count: 1;
-    column-gap: 0;
-    column-rule: none;
+
+  .article-thumb {
+    width: 100%;
+    height: 150px;
   }
-  .edition-content-text { font-size: 16px; }
-  .edition-content-headline { margin-bottom: 0.85rem; }
-}
-@media (max-width: 520px) {
-  .main { padding: 3rem 1.25rem 9rem; }
-  .botc-float { bottom: 1rem; left: 1rem; }
-  .fab-group { bottom: 1rem; right: 1rem; }
+
+  .reader-close {
+    width: 40px;
+    height: 40px;
+  }
+
+  .mobile-bottom-games {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 150;
+    gap: 1px;
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(14px);
+    box-shadow: 0 -8px 22px rgba(12, 12, 10, 0.18);
+  }
+
+  .mobile-game-link {
+    text-decoration: none;
+    color: #fff;
+    text-align: center;
+    padding: 0.82rem 0.4rem 0.9rem;
+    font-family: "Playfair Display", serif;
+    font-size: 0.92rem;
+    font-weight: 700;
+  }
+
+  .mobile-game-link small {
+    display: block;
+    font-family: "Montserrat", sans-serif;
+    font-size: 0.67rem;
+    font-weight: 600;
+    opacity: 0.9;
+    margin-top: 0.08rem;
+  }
+
+  .submit-modal {
+    width: calc(100vw - 1rem);
+  }
 }
 </style>
 </head>
 <body>
-
-<!-- HERO -->
-<section class="hero-section">
-  <canvas class="hero-dot-grid" aria-hidden="true"></canvas>
-  <p class="hero-eyebrow">The Online Newspaper of Edison Academy Magnet School</p>
-  <h1 class="hero-title">The Eagle Eye<span class="let">let</span></h1>
-
-  <div class="search-outer">
-    <div class="search-wrap">
-      <svg class="search-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8">
-        <circle cx="8.5" cy="8.5" r="5.5"/><path d="M15 15l-3-3"/>
-      </svg>
-      <input id="search-input" type="text" placeholder="Search articles, poems, editions…" autocomplete="off">
+  <div class="botc-mini-strip" aria-hidden="true">
+    <div class="mini-ticker-track">
+      <span class="mini-ticker-item">BOTC Standings</span>
+      <span class="mini-ticker-dot"></span>
+      <span class="mini-ticker-item"><span class="mini-rank rank-1">1</span> Class of '27 <strong>1,240</strong></span>
+      <span class="mini-ticker-dot"></span>
+      <span class="mini-ticker-item"><span class="mini-rank rank-2">2</span> Class of '29 <strong>1,105</strong></span>
+      <span class="mini-ticker-dot"></span>
+      <span class="mini-ticker-item"><span class="mini-rank rank-3">3</span> Class of '26 <strong>980</strong></span>
+      <span class="mini-ticker-dot"></span>
+      <span class="mini-ticker-item"><span class="mini-rank rank-4">4</span> Class of '28 <strong>870</strong></span>
+      <span class="mini-ticker-dot"></span>
+      <span class="mini-ticker-item">BOTC Standings</span>
+      <span class="mini-ticker-dot"></span>
+      <span class="mini-ticker-item"><span class="mini-rank rank-1">1</span> Class of '27 <strong>1,240</strong></span>
+      <span class="mini-ticker-dot"></span>
+      <span class="mini-ticker-item"><span class="mini-rank rank-2">2</span> Class of '29 <strong>1,105</strong></span>
+      <span class="mini-ticker-dot"></span>
+      <span class="mini-ticker-item"><span class="mini-rank rank-3">3</span> Class of '26 <strong>980</strong></span>
+      <span class="mini-ticker-dot"></span>
+      <span class="mini-ticker-item"><span class="mini-rank rank-4">4</span> Class of '28 <strong>870</strong></span>
     </div>
-    <div id="search-results"></div>
-  </div>
-</section>
-
-<!-- MAIN -->
-<main class="main" id="content">
-
-  <div class="edition-header">
-    <span class="edition-label">Edition #4</span>
-    <span class="edition-date">April 26, 2026</span>
-    <div class="edition-line"></div>
   </div>
 
-  <div class="content-grid">
-    <div class="edition-tabs" id="edition-tabs" role="tablist"></div>
-    <div class="edition-content" id="edition-content" role="tabpanel"></div>
-  </div>
+  <div class="shell">
+    <div class="desktop-grid">
+      <header class="topbar">
+        <div class="topbar-main">
+          <div class="brand">
+            <h1 class="brand-title"><span class="brand-name">The Eagle Eye</span><span class="accent">let</span></h1>
+            <p class="brand-subtitle">The Online Newspaper of <span class="subtitle-school">Edison Academy Magnet School</span></p>
+          </div>
+          <div class="edition-switcher">
+            <label for="edition-select" id="edition-switch-label">Current Edition - April 26, 2026</label>
+            <select id="edition-select" aria-label="Select edition"></select>
+          </div>
+        </div>
+        <div class="topbar-search">
+          <div class="search-outer">
+            <div class="search-wrap">
+              <svg class="search-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                <circle cx="8.5" cy="8.5" r="5.5"/>
+                <path d="M15 15l-3-3"/>
+              </svg>
+              <input id="search-input" type="search" placeholder="Search articles in this edition…" autocomplete="off" enterkeyhint="search">
+            </div>
+          </div>
+        </div>
+      </header>
 
-</main>
+      <section class="edition-panel" aria-live="polite">
+        <ul class="article-list" id="article-list"></ul>
+        <div class="reader-panel" id="reader-panel" aria-hidden="true">
+          <article class="reader-shell">
+            <div class="reader-topbar">
+              <button class="reader-close" id="reader-close" type="button" aria-label="Close article">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true">
+                  <path d="M18 6L6 18M6 6l12 12"/>
+                </svg>
+              </button>
+            </div>
+            <div class="reader-content">
+              <img class="reader-hero" id="reader-hero" src="" alt="">
+              <h3 class="reader-title" id="reader-title"></h3>
+              <p class="reader-meta" id="reader-meta"></p>
+              <div class="reader-body" id="reader-body"></div>
+            </div>
+          </article>
+        </div>
+      </section>
 
-<footer>
-  <p class="footer-logo">The Eagle Eye<span>let</span></p>
-  <p>The Online Newspaper of Edison Academy Magnet School &nbsp;·&nbsp; Edison, NJ</p>
-  <p style="margin-top:0.3rem;">© 2026 Eagle Eyelet Staff</p>
-</footer>
-
-<!-- BOTC FLOAT (bottom-left) -->
-<div class="botc-float">
-  <div class="botc-lb-card">
-    <div class="botc-title-row">
-      <div class="botc-dot"></div>
-      <span class="title-text"><span>BOTC</span> &nbsp;Leaderboard</span>
+      <aside class="botc-panel">
+        <div class="botc-head">
+          <p class="botc-title">BOTC Leaderboard</p>
+        </div>
+        <ol class="leaderboard">
+          <li><span>1</span><span>Class of '27</span><strong>1,240</strong></li>
+          <li><span>2</span><span>Class of '29</span><strong>1,105</strong></li>
+          <li><span>3</span><span>Class of '26</span><strong>980</strong></li>
+          <li><span>4</span><span>Class of '28</span><strong>870</strong></li>
+        </ol>
+        <div class="apps">
+          <div class="apps-head">
+            <p class="apps-title">EARN BOTC!</p>
+          </div>
+          <a class="app-card wordle" data-game="Wordle" href="https://wordleplay.com/" aria-label="Open Wordle app">
+            <span>Wordle</span>
+            <small>+50 pts</small>
+          </a>
+          <a class="app-card connections" data-game="Connections" href="https://connectionsplus.io/" aria-label="Open Connections app">
+            <span>Connections</span>
+            <small>+45 pts</small>
+          </a>
+          <a class="app-card strands" data-game="Strands" href="https://strandsgame.io/" aria-label="Open Strands app">
+            <span>Strands</span>
+            <small>+40 pts</small>
+          </a>
+        </div>
+        <div class="botc-actions">
+          <button class="botc-ghost-btn" id="open-submit-modal" type="button">Submit to Eagle Eye</button>
+        </div>
+      </aside>
     </div>
-    <div class="lb-rows">
-      <div class="lb-row">
-        <span class="lb-rank gold">1</span>
-        <span class="lb-name">Class of '27</span>
-        <span class="lb-val">1,240</span>
+  </div>
+  <div class="submit-modal-overlay" id="submit-overlay"></div>
+  <section class="submit-modal" id="submit-modal" aria-hidden="true">
+    <div class="submit-head">
+      <h3>Submit to Eagle Eye</h3>
+      <button class="submit-close" id="close-submit-modal" type="button" aria-label="Close submit form">Close</button>
+    </div>
+    <div class="submit-body">
+      <div class="submit-field">
+        <label for="submit-title">Article Title</label>
+        <input id="submit-title" type="text" placeholder="Enter your headline">
       </div>
-      <div class="lb-row">
-        <span class="lb-rank">2</span>
-        <span class="lb-name">Class of '29</span>
-        <span class="lb-val">1,105</span>
+      <div class="submit-field">
+        <label for="submit-images">Image URLs</label>
+        <input id="submit-images" type="text" placeholder="https://... (comma separated)">
       </div>
-      <div class="lb-row">
-        <span class="lb-rank">3</span>
-        <span class="lb-name">Class of '26</span>
-        <span class="lb-val">980</span>
+      <div class="submit-field">
+        <label>Article Body (Rich Text)</label>
+        <div class="submit-toolbar">
+          <button class="tool-btn" type="button" data-cmd="bold">Bold</button>
+          <button class="tool-btn" type="button" data-cmd="italic">Italic</button>
+          <button class="tool-btn" type="button" data-cmd="underline">Underline</button>
+          <button class="tool-btn" type="button" data-cmd="insertUnorderedList">Bullet List</button>
+          <button class="tool-btn" type="button" data-cmd="formatBlock" data-value="h2">H2</button>
+          <button class="tool-btn" type="button" data-cmd="formatBlock" data-value="p">Paragraph</button>
+        </div>
+        <div class="submit-editor" id="submit-editor" contenteditable="true">Start writing your article here...</div>
       </div>
-      <div class="lb-row">
-        <span class="lb-rank">4</span>
-        <span class="lb-name">Class of '28</span>
-        <span class="lb-val">870</span>
-      </div>
-    </div>
-  </div>
-
-  <div class="botc-games-panel">
-    <div class="botc-earn-pill">EARN BOTC!</div>
-    <div class="botc-game-buttons">
-      <button class="bgame-btn wordle" onclick="window.open('about:blank','_blank')">
-        Wordle <span class="btn-pts">+50 pts</span>
-      </button>
-      <button class="bgame-btn connections" onclick="window.open('about:blank','_blank')">
-        Connections <span class="btn-pts">+45 pts</span>
-      </button>
-      <button class="bgame-btn strands" onclick="window.open('about:blank','_blank')">
-        Strands <span class="btn-pts">+40 pts</span>
-      </button>
-    </div>
-  </div>
-</div>
-
-<!-- FABs (bottom-right) -->
-<div class="fab-group">
-  <div class="past-editions-fab" id="past-editions-fab">
-    <button class="fab" type="button" id="past-editions-toggle" aria-expanded="false">
-      <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8">
-        <rect x="3" y="4" width="14" height="13" rx="1.5"/><path d="M7 8h6M7 11h4"/>
-      </svg>
-      Past Editions
-    </button>
-    <div class="past-editions-panel" id="past-editions-panel">
-      <div class="past-editions-inner">
-        <div class="past-edition-list" id="past-edition-list"></div>
+      <div class="submit-actions">
+        <button class="submit-action" type="button" id="cancel-submit-modal">Cancel</button>
+        <button class="submit-action primary" id="send-gmail" type="button">Send via Gmail</button>
       </div>
     </div>
-  </div>
-  <a class="fab" href="about:blank" target="_blank">
-    <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8">
-      <path d="M10 13V4M6 8l4-5 4 5"/><path d="M4 16h12"/>
-    </svg>
-    Submit
-  </a>
-</div>
-
-<div class="past-edition-modal" id="past-edition-modal" aria-hidden="true">
-  <div class="past-edition-modal-overlay" id="past-edition-modal-overlay"></div>
-  <div class="past-edition-modal-dialog" role="dialog" aria-modal="true" aria-label="Past edition content">
-    <div class="past-edition-modal-topbar">
-      <div class="past-edition-modal-meta" id="past-edition-modal-meta"></div>
-      <button class="past-edition-modal-close" type="button" id="past-edition-modal-close">Close</button>
+  </section>
+  <section class="game-link-modal" id="game-link-modal" aria-hidden="true">
+    <div class="game-link-head">
+      <h3 class="game-link-title" id="game-link-title">Play Game</h3>
+      <button class="submit-close" id="close-game-link-modal" type="button" aria-label="Close game link">Close</button>
     </div>
-    <div class="past-edition-modal-body">
-      <div class="content-grid past-edition-modal-grid">
-        <div class="edition-tabs" id="past-edition-tabs" role="tablist"></div>
-        <div class="edition-content" id="past-edition-content" role="tabpanel"></div>
+    <div class="game-link-body">
+      <div class="game-frame-wrap">
+        <div class="game-loading" id="game-loading">
+          <div class="game-spinner" aria-hidden="true"></div>
+          <p class="game-loading-text" id="game-loading-text">Loading game...</p>
+        </div>
+        <iframe class="game-frame" id="game-frame" src="about:blank" title="Game preview" loading="lazy" referrerpolicy="no-referrer"></iframe>
+      </div>
+      <div class="game-link-actions">
+        <span class="game-link-note">If embed is blocked, open in new tab.</span>
+        <a class="submit-action primary" id="open-game-link" href="#" target="_blank" rel="noopener noreferrer">Open Game</a>
       </div>
     </div>
-  </div>
-</div>
+  </section>
+  <nav class="mobile-bottom-games" aria-label="BOTC games">
+    <a class="mobile-game-link wordle" data-game="Wordle" href="https://wordleplay.com/" aria-label="Open Wordle app">Wordle<small>+50 pts</small></a>
+    <a class="mobile-game-link connections" data-game="Connections" href="https://connectionsplus.io/" aria-label="Open Connections app">Connections<small>+45 pts</small></a>
+    <a class="mobile-game-link strands" data-game="Strands" href="https://strandsgame.io/" aria-label="Open Strands app">Strands<small>+40 pts</small></a>
+  </nav>
 
 <script>
-const editionItems = [
+const editions = [
   {
-    tag: 'News',
-    title: 'The Snow Problem',
-    author: 'By John Doe',
-    content: [
-      "We're having a massive snow problem. No, not like the Hunger Games; more like the weather. All around the globe, snowfall is declining rapidly as temperatures and pollution increase.",
-      'While data shows more extreme winter storms and increased snowfall in some parts of the globe, it is likely that there will be far fewer of these years and eventually, none at all. In fact, ever since 1972, snowfall has declined 2.7% globally, especially in the Northern Hemisphere.',
-      'While some may be rejoicing at the lack of shoveling, snow is critical for our environment because it stores water as snow during "wet times" and releases it when water is harder to come by, according to University of Washington environmental engineering professor Jessica Lundquist. This snowpack was actually found to provide over 50% of the water supply in the western United States. A 2015 study found that 2 billion people who rely on this melting snow for water face declines of up to 67% in areas of Asia, the Mediterranean, and parts of North Africa. This challenge is not as pronounced all around the globe, but in areas like the American Midwest, the impact will be detrimental.',
-      'In order to combat the detrimental effects of this change, researchers in Yosemite are using aerial imagery to map these snow patches and determine their cruciality to the environment as well as how water resources should be shifted to better suit the climate.',
-      "While this issue certainly cannot be tackled by individual citizens alone, everyone must do their part to make sustainable choices when possible: it is the only way to tackle this lack of snow. Don't be surprised if we go without a snow day again this school year."
-    ]
-  },
-  {
-    tag: 'Opinion',
-    title: "Why I'm Opting for Staycation This Spring Break",
-    author: 'By Jane Doe',
-    content: [
-      "Somewhere along the way, spring break stopped being a break and turned into a performance. It feels like everyone is posting airport selfies, beach clips, and color-coded itineraries, and if your week doesn't look like a travel montage, it can seem like you're doing it wrong.",
-      "This year I'm skipping that pressure and choosing a staycation on purpose. Not because travel is bad, but because I don't need to spend half my break waking up at 4 a.m., waiting in lines, and rushing from one activity to the next just to say I went somewhere.",
-      'A staycation gives me something that trips rarely do: actual rest. I can sleep, catch up on books I never finish during the semester, spend time with family, and still have room for the random things school life pushes aside, like trying a recipe, biking nearby trails, or just taking a day offline.',
-      "There's also the money factor. Flights, hotels, and meals out add up quickly, and pretending they don't can create unnecessary stress for families. Staying local doesn't mean doing nothing; it means choosing experiences that fit your life instead of forcing your life to fit the trend.",
-      'For me, spring break is successful if I return recharged, not if I return with the most dramatic photo dump. A quieter week at home may not look exciting on social media, but it feels a lot more like the break we actually need.'
-    ]
-  },
-  {
-    tag: 'Poem',
-    title: 'Generation Wembley',
-    author: 'By Jack Doe',
-    content: [
-      'In 2010 the dream went silent,',
-      'boots heavy in a rain-dark lane,',
-      "the night wrote Inter in iron letters,",
-      'and every scarf remembered pain.',
-      '',
-      'Years moved on like winter stations,',
-      'cold platforms, echo, distant light;',
-      'still we carried songs half-broken,',
-      'still we kept the red and white.',
-      '',
-      'Then came children raised on reruns,',
-      'on stories told instead of seen,',
-      'Generation Wembley, restless,',
-      'learning what belief can mean.',
-      '',
-      'Not a miracle, not one moment,',
-      'but thousand passes, patient fire,',
-      'backs against the noise of doubters,',
-      'hearts that climbed a little higher.',
-      '',
-      'If you ask us why we stayed here,',
-      'why we sang through every scar,',
-      "it's because a dream once broken",
-      'still can know exactly who you are.'
-    ]
-  },
-  {
-    tag: 'BOTC Game',
-    title: 'Wordle',
-    author: 'Will be implemented later',
-    gameType: 'wordle',
-    content: ['Will be implemented later']
-  },
-  {
-    tag: 'BOTC Game',
-    title: 'Connections',
-    author: 'Will be implemented later',
-    gameType: 'connections',
-    content: ['Will be implemented later']
-  },
-  {
-    tag: 'BOTC Game',
-    title: 'Strands',
-    author: 'Will be implemented later',
-    gameType: 'strands',
-    content: ['Will be implemented later']
-  }
-];
-
-const pastEditions = [
-  {
-    editionName: 'Edition #3',
-    date: 'April 19, 2026',
-    items: [
+    id: "ed4",
+    label: "Edition #4",
+    number: "Edition #4",
+    title: "April Edition",
+    date: "April 26, 2026",
+    articles: [
       {
-        tag: 'News',
-        title: 'School Spirit Week Recap',
-        author: 'By Priya Shah',
-        content: [
-          'Spirit Week packed every hallway with themed outfits, class banners, and club pop-ups that made lunch periods feel more like mini festivals than routine breaks.',
-          'Student council estimated participation rose across every grade, with Wednesday and Friday events drawing the strongest turnout and more homeroom-led coordination.',
-          'The pep rally finale leaned heavily into student performances and class games, and post-event feedback asked for even more student-run segments next cycle.'
+        title: "Lights, Camera, Talent!",
+        snippet: "A recap of Edison Academy's biggest event of the year and highlights from the senior surprise.",
+        meta: "Feature - 2 min read",
+        image: "https://images.unsplash.com/photo-1516280440614-37939bbacd81?auto=format&fit=crop&w=1400&q=80",
+        body: [
+          "Edison Academy's annual talent show turned the auditorium into a full-scale celebration of student creativity. From vocal performances to dance sets, every act felt thoughtfully prepared and genuinely personal.",
+          "The most memorable moments came from the transitions between acts, where hosts kept the crowd engaged and gave each performer a clear spotlight. The event felt polished without losing the student-run charm that makes it special.",
+          "By the end of the night, the senior surprise reminded everyone why this event has become a signature Academy tradition: it brings the whole school into one room, cheering for each other.",
+          "In interviews after the show, participants said the most valuable part was the process itself. Rehearsals became collaboration spaces where students from different clubs and grade levels built trust quickly.",
+          "Faculty volunteers described this year as one of the most organized editions yet, crediting student stage managers for balancing timing, lights, and transitions with near-professional discipline.",
+          "The event's emotional arc made it memorable: high-energy opening acts, slower reflective moments, and a final sequence that united the audience in a standing ovation."
         ]
       },
       {
-        tag: 'Opinion',
-        title: 'Why Hallway Displays Matter More Than We Think',
-        author: 'By Alina Thomas',
-        content: [
-          'Hallway displays often look like decoration, but they quietly shape how students feel about belonging in a space that can otherwise feel rushed and transactional.',
-          'When student art, writing, and club projects are visible, school becomes less abstract. It feels like a shared place instead of a schedule we pass through.',
-          'If we want stronger school culture, we should treat public student work as part of the learning environment, not as optional extras between announcements.'
+        title: "The Snow Problem",
+        snippet: "A climate-focused editorial on why local winters are changing and what students can do now.",
+        meta: "Editorial - 2 min read",
+        image: "https://images.unsplash.com/photo-1483664852095-d6cc6870702d?auto=format&fit=crop&w=1400&q=80",
+        body: [
+          "Many students have noticed that winter feels shorter and less predictable than before. Snow days are rarer, and the seasonal rhythm the school community grew up with is starting to shift.",
+          "While global climate trends can feel distant, their local impact is visible now: warmer average temperatures, shorter snow coverage, and more abrupt weather swings.",
+          "The editorial argues that student action still matters. School-level initiatives, informed voting, and everyday conservation efforts become more meaningful when adopted by entire communities.",
+          "Students in science electives noted that climate literacy has improved, but translating awareness into behavior is still the challenge. The conversation is moving from abstract concern to practical accountability.",
+          "The piece also raises equity concerns. Not every family can adapt to climate shifts at the same pace, and schools may need to rethink support systems for weather-related disruptions.",
+          "Ultimately, the argument is not about nostalgia for snow days; it is about understanding that environmental change is already rewriting daily life in measurable ways."
         ]
       },
       {
-        tag: 'Poem',
-        title: 'Cafeteria Clock',
-        author: 'By Noor Patel',
-        content: [
-          'The bell rings once and trays begin,',
-          'a silver tide through tiled noon light,',
-          'voices braid above the tables,',
-          'brief and loud and bright.',
-          '',
-          'Someone laughs near vending glass,',
-          'someone sketches on a sleeve,',
-          'someone saves the last few minutes',
-          'for a thought they cannot leave.',
-          '',
-          'Then the clock collects us gently,',
-          'backs and books and hallway air,',
-          'and the room, still warm with chatter,',
-          'holds the shape of being there.'
+        title: "Android v. iOS: The People's Debate",
+        snippet: "An impartial take on one of the internet's oldest tech arguments from a student perspective.",
+        meta: "Tech Talk - 2 min read",
+        image: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=1400&q=80",
+        body: [
+          "The piece frames the Android versus iOS debate around practical student needs: battery life, messaging compatibility, camera quality, and long-term value.",
+          "Instead of arguing for a winner, it highlights how preference often depends on ecosystem comfort. Some users value iOS consistency; others prefer Android flexibility and device choice.",
+          "The conclusion is refreshingly simple: the best phone is the one that supports your daily workflow without friction.",
+          "Power users emphasized customization and multitasking features available in many Android devices, while iOS users highlighted app optimization and reliability under heavy daily use.",
+          "The conversation also included repairability and sustainability, with students noting that durability and long software support should matter as much as camera upgrades.",
+          "By focusing on behavior rather than brand identity, the article turns a polarizing debate into a useful buying framework for real people."
         ]
       },
       {
-        tag: 'BOTC Game',
-        title: 'Wordle',
-        author: 'Will be implemented later',
-        gameType: 'wordle',
-        content: ['Will be implemented later']
+        title: "The Battle Between Pages and Pixels",
+        snippet: "A student editorial on why the print versus digital debate still matters in modern classrooms.",
+        meta: "Editorial - 3 min read",
+        image: "https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=1400&q=80",
+        body: [
+          "The argument over print and digital reading has moved beyond convenience and into concentration, retention, and classroom culture.",
+          "Students shared that physical pages reduce distractions and improve annotation habits, while digital formats make discovery and access significantly easier.",
+          "Rather than picking one winner, the article suggests schools should design for context: print for deep reading, digital for search-heavy workflows.",
+          "The strongest takeaway is that medium shapes behavior. Good editorial design should account for how students actually consume information."
+        ]
       },
       {
-        tag: 'BOTC Game',
-        title: 'Connections',
-        author: 'Will be implemented later',
-        gameType: 'connections',
-        content: ['Will be implemented later']
+        title: "Junior State of America's 2023 ChapterCon",
+        snippet: "A recap of the chapter's strongest moments and what delegates learned from this year’s conference.",
+        meta: "School & Club News - 2 min read",
+        image: "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=1400&q=80",
+        body: [
+          "Delegates described ChapterCon as one of the most energizing events of the year, with sessions that blended policy depth and public speaking intensity.",
+          "First-time attendees noted that committee simulations helped them think faster, defend positions clearly, and collaborate under pressure.",
+          "Organizers emphasized that sustained preparation before the event was what produced stronger outcomes during debate rounds.",
+          "By the end, members left with practical confidence and clearer leadership goals for the semester ahead."
+        ]
       },
       {
-        tag: 'BOTC Game',
-        title: 'Strands',
-        author: 'Will be implemented later',
-        gameType: 'strands',
-        content: ['Will be implemented later']
+        title: "Staycation Over Vacation",
+        snippet: "Why some students are choosing home over travel during breaks and what that says about priorities.",
+        meta: "Holidays & Seasonal - 2 min read",
+        image: "https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1400&q=80",
+        body: [
+          "In a school community where travel traditions run deep, staycations can feel unconventional, but many students say they offer real rest.",
+          "The article explores time, cost, and family schedules as major factors in choosing local breaks over long-distance plans.",
+          "Students also mentioned that staying local allows them to reset routines, finish creative projects, and reconnect with nearby friends.",
+          "The piece reframes staycation not as a compromise, but as an intentional way to reclaim holiday pace."
+        ]
       }
     ]
   },
   {
-    editionName: 'Edition #2',
-    date: 'April 12, 2026',
-    items: [
+    id: "ed3",
+    label: "Edition #3",
+    number: "Edition #3",
+    title: "March Edition",
+    date: "March 24, 2026",
+    articles: [
       {
-        tag: 'News',
-        title: 'Cafeteria Feedback Drives Menu Changes',
-        author: 'By Mateo Ruiz',
-        content: [
-          'After more than four hundred survey responses, cafeteria staff piloted two rotating weekly meals and expanded vegetarian offerings requested by students.',
-          'The highest-rated updates were faster service flow and clearer signage for daily specials, which helped reduce indecision at the busiest service windows.',
-          'Administrators said the next phase will track participation and waste data so future menu updates can reflect both student preference and sustainability goals.'
+        title: "Chipotle Fundraiser Fiesta",
+        snippet: "How AEF fundraising powers school events and what support means for student clubs.",
+        meta: "School News - 1 min read",
+        image: "https://images.unsplash.com/photo-1552332386-f8dd00dc2f85?auto=format&fit=crop&w=1400&q=80",
+        body: [
+          "The fundraiser spotlighted how local partnerships can directly support school programming. Participation from students and families translated into real funding for events.",
+          "Organizers emphasized that consistent support, even in small amounts, helps clubs plan with more confidence and execute larger initiatives.",
+          "AEF representatives shared that transparent reporting has improved turnout because families can clearly see how contributions map to specific student experiences.",
+          "Club leaders said this style of fundraiser works because it blends routine community behavior with mission-aligned outcomes."
         ]
       },
       {
-        tag: 'Opinion',
-        title: 'Students Should Help Design Lunch Schedules',
-        author: 'By Serena Kim',
-        content: [
-          'Menu improvements are helpful, but scheduling still drives most lunch frustration. A better lunch period starts with how time is allocated, not only what is served.',
-          'Student representatives could provide practical input on line flow, seating bottlenecks, and transition timing that adults often miss from administrative vantage points.',
-          'If schools ask students for food feedback, they should also include students in timetable decisions that determine whether anyone can actually enjoy that food.'
+        title: "A Green Jump for Technology",
+        snippet: "A look at agri-tech innovation and practical ways sustainability intersects with daily life.",
+        meta: "Technology - 2 min read",
+        image: "https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=1400&q=80",
+        body: [
+          "Agri-tech is transforming how food is grown, monitored, and delivered. Tools like precision sensors and climate-aware farming systems can reduce waste and improve resilience.",
+          "The article connects these advances to student life by showing that sustainability is not abstract; it appears in food systems, transportation, and household decisions.",
+          "Researchers cited in the piece suggest that next-generation tools will prioritize water efficiency, soil health tracking, and predictive risk alerts for extreme weather.",
+          "The broader point is optimistic: technical innovation and environmental responsibility are not competing goals when systems are designed intentionally."
         ]
-      },
-      {
-        tag: 'Poem',
-        title: 'Tray Lines',
-        author: 'By Ishan Mehta',
-        content: [
-          'We shuffle forward, inch by inch,',
-          'beneath the hum of fluorescent noon,',
-          'names of meals on paper cards,',
-          'the promise of a spoon.',
-          '',
-          'Steam curls up like weather maps,',
-          'pointing where the crowd will turn,',
-          'every minute folded tightly',
-          'into what we choose and learn.',
-          '',
-          'By the time the last seat fills,',
-          'conversation starts to rise,',
-          'and a simple tray becomes',
-          'a small republic of replies.'
-        ]
-      },
-      {
-        tag: 'BOTC Game',
-        title: 'Wordle',
-        author: 'Will be implemented later',
-        gameType: 'wordle',
-        content: ['Will be implemented later']
-      },
-      {
-        tag: 'BOTC Game',
-        title: 'Connections',
-        author: 'Will be implemented later',
-        gameType: 'connections',
-        content: ['Will be implemented later']
-      },
-      {
-        tag: 'BOTC Game',
-        title: 'Strands',
-        author: 'Will be implemented later',
-        gameType: 'strands',
-        content: ['Will be implemented later']
       }
     ]
   },
   {
-    editionName: 'Edition #1',
-    date: 'April 5, 2026',
-    items: [
+    id: "ed2",
+    label: "Edition #2",
+    number: "Edition #2",
+    title: "February Edition",
+    date: "February 19, 2026",
+    articles: [
       {
-        tag: 'News',
-        title: 'Spring Arts Showcase Announces Lineup',
-        author: 'By Emily Tran',
-        content: [
-          'The arts department released this year\'s showcase lineup, including student bands, spoken-word performances, photography walls, and collaborative visual installations.',
-          'Teachers emphasized that the event is designed as a cross-discipline exhibit, with music, literary arts, and studio pieces sharing one audience flow throughout the evening.',
-          'Organizers opened volunteer sign-ups for stage crew, lighting support, and gallery guides so students can participate behind the scenes as well as on stage.'
+        title: "Bear-y Important Diplomacy",
+        snippet: "A student explainer on recent diplomatic moments and why they matter.",
+        meta: "Politics - 2 min read",
+        image: "https://images.unsplash.com/photo-1529101091764-c3526daf38fe?auto=format&fit=crop&w=1400&q=80",
+        body: [
+          "Diplomacy can look symbolic from the outside, but symbols shape policy relationships over time. The article unpacks how staged meetings and public messaging carry strategic intent.",
+          "For students following current events, the takeaway is that foreign policy is often about momentum and signaling as much as immediate outcomes.",
+          "The writer explains that bilateral optics are often used to manage domestic audiences while quietly opening space for longer negotiations.",
+          "Viewed this way, ceremonial moments become part of the policy process rather than decorative extras."
         ]
       },
       {
-        tag: 'Opinion',
-        title: 'Art Nights Should Be Schoolwide Priorities',
-        author: 'By Daniel Cho',
-        content: [
-          'Arts events are often promoted as optional enrichment, but they do something core academics cannot: they let students show identity through voice, movement, and design.',
-          'When school calendars crowd out arts nights, the message is that creative work matters less than measurable outputs. Students notice that hierarchy immediately.',
-          'Treating showcases as anchor events would strengthen attendance, morale, and interdisciplinary pride in ways that standard assemblies rarely accomplish.'
+        title: "It Really Is a Wonderful Life",
+        snippet: "A modern review of a timeless film and what still resonates with student viewers.",
+        meta: "Entertainment - 2 min read",
+        image: "https://images.unsplash.com/photo-1485846234645-a62644f84728?auto=format&fit=crop&w=1400&q=80",
+        body: [
+          "This review revisits the film through a contemporary lens, focusing on themes of community responsibility and personal meaning.",
+          "What keeps it relevant is its emotional pacing and its argument that individual choices still matter within larger social systems.",
+          "The article notes how the film's quieter scenes still land with modern audiences because they avoid cynicism and center relational stakes.",
+          "Rather than framing it as nostalgia, the review treats it as a case study in enduring storytelling craft."
         ]
-      },
-      {
-        tag: 'Poem',
-        title: 'Backstage Tape',
-        author: 'By Riya Nair',
-        content: [
-          'Blue tape marks the waiting place,',
-          'left wing, quiet, breathing slow,',
-          'someone counts the beats in whispers,',
-          'someone mouths the words they know.',
-          '',
-          'Curtain light leaks through the dark,',
-          'gold and dust and paper stars,',
-          'every heartbeat turns electric',
-          'under rigging, cords, and bars.',
-          '',
-          'Then a cue and all at once',
-          'nervous hands become a flame,',
-          'and the stage, for one bright evening,',
-          'learns the shape of every name.'
-        ]
-      },
-      {
-        tag: 'BOTC Game',
-        title: 'Wordle',
-        author: 'Will be implemented later',
-        gameType: 'wordle',
-        content: ['Will be implemented later']
-      },
-      {
-        tag: 'BOTC Game',
-        title: 'Connections',
-        author: 'Will be implemented later',
-        gameType: 'connections',
-        content: ['Will be implemented later']
-      },
-      {
-        tag: 'BOTC Game',
-        title: 'Strands',
-        author: 'Will be implemented later',
-        gameType: 'strands',
-        content: ['Will be implemented later']
       }
     ]
   }
 ];
 
-const searchData = [
-  ...editionItems.filter((item) => item.tag !== 'BOTC Game').map((item, index) => ({
-    tag: item.tag,
-    title: item.title,
-    author: item.author,
-    target: 'current',
-    editionIndex: index
-  })),
-  ...pastEditions.flatMap((edition, editionIndex) =>
-    edition.items.filter((item) => item.tag !== 'BOTC Game').map((item, itemIndex) => ({
-      tag: item.tag,
-      title: item.title,
-      author: item.author,
-      target: 'past',
-      pastEditionIndex: editionIndex,
-      pastItemIndex: itemIndex
-    }))
-  ),
-  { tag: 'BOTC Game', title: 'Wordle — +50 pts' },
-  { tag: 'BOTC Game', title: 'Connections — +45 pts' },
-  { tag: 'BOTC Game', title: 'Strands — +40 pts' }
-];
+const editionSelect = document.getElementById("edition-select");
+const editionSwitchLabel = document.getElementById("edition-switch-label");
+const articleList = document.getElementById("article-list");
+const readerPanel = document.getElementById("reader-panel");
+const readerTitle = document.getElementById("reader-title");
+const readerMeta = document.getElementById("reader-meta");
+const readerBody = document.getElementById("reader-body");
+const readerHero = document.getElementById("reader-hero");
+const readerClose = document.getElementById("reader-close");
+const openSubmitModalBtn = document.getElementById("open-submit-modal");
+const submitOverlay = document.getElementById("submit-overlay");
+const submitModal = document.getElementById("submit-modal");
+const closeSubmitModalBtn = document.getElementById("close-submit-modal");
+const cancelSubmitModalBtn = document.getElementById("cancel-submit-modal");
+const submitEditor = document.getElementById("submit-editor");
+const submitTitleInput = document.getElementById("submit-title");
+const submitImagesInput = document.getElementById("submit-images");
+const sendGmailBtn = document.getElementById("send-gmail");
+const gameLinkModal = document.getElementById("game-link-modal");
+const gameLinkTitle = document.getElementById("game-link-title");
+const gameFrame = document.getElementById("game-frame");
+const gameLoading = document.getElementById("game-loading");
+const gameLoadingText = document.getElementById("game-loading-text");
+const openGameLinkBtn = document.getElementById("open-game-link");
+const closeGameLinkModalBtn = document.getElementById("close-game-link-modal");
+const gameLaunchLinks = document.querySelectorAll(".app-card, .mobile-game-link");
+const formatButtons = document.querySelectorAll(".tool-btn");
+const searchInput = document.getElementById("search-input");
 
-const sinput = document.getElementById('search-input');
-const sresults = document.getElementById('search-results');
-const heroSection = document.querySelector('.hero-section');
-const heroDotGrid = document.querySelector('.hero-dot-grid');
-const botcFloat = document.querySelector('.botc-float');
-const editionTabsContainer = document.getElementById('edition-tabs');
-const editionContent = document.getElementById('edition-content');
-const contentSection = document.getElementById('content');
-const pastEditionsFab = document.getElementById('past-editions-fab');
-const pastEditionsToggle = document.getElementById('past-editions-toggle');
-const pastEditionList = document.getElementById('past-edition-list');
-const pastEditionContent = document.getElementById('past-edition-content');
-const pastEditionTabs = document.getElementById('past-edition-tabs');
-const pastEditionModal = document.getElementById('past-edition-modal');
-const pastEditionModalOverlay = document.getElementById('past-edition-modal-overlay');
-const pastEditionModalMeta = document.getElementById('past-edition-modal-meta');
-const pastEditionModalClose = document.getElementById('past-edition-modal-close');
-let setHeroGridSearching = () => {};
-let currentSearchHits = [];
-let selectedPastEdition = 0;
-let selectedPastItemByEdition = {};
-let editionTabs = [];
+let currentEdition = editions[0];
+const latestEditionId = editions[0].id;
+let gameLoadTimeout = null;
 
-function initHeroDotGrid() {
-  if (!heroSection || !heroDotGrid) return;
-  const ctx = heroDotGrid.getContext('2d');
-  if (!ctx) return;
-
-  const state = {
-    width: 0,
-    height: 0,
-    dpr: 1,
-    dots: [],
-    influencers: [],
-    lastFrameMs: 0,
-    searchFadeProgress: 0,
-    searchFadeTarget: 0,
-    searchFadeFrom: 0,
-    searchFadeStartMs: 0,
-    searchFadeDurationMs: 2200,
-    rafId: 0
-  };
-  const settings = {
-    gap: 28,
-    baseRadius: 1.25,
-    maxRadius: 2.95,
-    maxOffset: 7,
-    influenceRadius: 260,
-    influenceCount: 6,
-    influencerSpeedMin: 95,
-    influencerSpeedMax: 190,
-    influencerTurnSpeed: 1.1
-  };
-
-  function randomInfluencer() {
-    return {
-      x: Math.random() * state.width,
-      y: Math.random() * state.height,
-      heading: Math.random() * Math.PI * 2,
-      speed: settings.influencerSpeedMin + (Math.random() * (settings.influencerSpeedMax - settings.influencerSpeedMin)),
-      wanderSeed: Math.random() * Math.PI * 2
-    };
-  }
-
-  function buildDots() {
-    state.dots = [];
-    const xStart = settings.gap * 0.5;
-    const yStart = settings.gap * 0.5;
-    for (let y = yStart; y < state.height; y += settings.gap) {
-      for (let x = xStart; x < state.width; x += settings.gap) {
-        state.dots.push({
-          anchorX: x,
-          anchorY: y,
-          radiusNoise: Math.random()
-        });
-      }
-    }
-  }
-
-  function buildInfluencers() {
-    state.influencers = [];
-    const count = Math.max(1, settings.influenceCount);
-    for (let i = 0; i < count; i += 1) {
-      state.influencers.push(randomInfluencer());
-    }
-  }
-
-  function updateInfluencers(dt, nowMs) {
-    const t = nowMs * 0.001;
-    for (let i = 0; i < state.influencers.length; i += 1) {
-      const influencer = state.influencers[i];
-      const drift = Math.sin(t * 0.48 + influencer.wanderSeed) * settings.influencerTurnSpeed;
-      influencer.heading += drift * dt;
-      influencer.x += Math.cos(influencer.heading) * influencer.speed * dt;
-      influencer.y += Math.sin(influencer.heading) * influencer.speed * dt;
-
-      if (influencer.x < 0) {
-        influencer.x = 0;
-        influencer.heading = Math.PI - influencer.heading;
-      } else if (influencer.x > state.width) {
-        influencer.x = state.width;
-        influencer.heading = Math.PI - influencer.heading;
-      }
-      if (influencer.y < 0) {
-        influencer.y = 0;
-        influencer.heading = -influencer.heading;
-      } else if (influencer.y > state.height) {
-        influencer.y = state.height;
-        influencer.heading = -influencer.heading;
-      }
-    }
-  }
-
-  function draw(nowMs) {
-    state.rafId = 0;
-    if (!state.lastFrameMs) state.lastFrameMs = nowMs;
-    const dt = Math.min(0.04, Math.max(0.001, (nowMs - state.lastFrameMs) / 1000));
-    state.lastFrameMs = nowMs;
-    if (state.searchFadeProgress !== state.searchFadeTarget) {
-      const elapsed = Math.max(0, nowMs - state.searchFadeStartMs);
-      const t = Math.min(1, elapsed / state.searchFadeDurationMs);
-      const eased = 1 - Math.pow(1 - t, 3);
-      state.searchFadeProgress = state.searchFadeFrom + ((state.searchFadeTarget - state.searchFadeFrom) * eased);
-      if (t === 1) {
-        state.searchFadeProgress = state.searchFadeTarget;
-      }
-    }
-
-    ctx.clearRect(0, 0, state.width, state.height);
-    updateInfluencers(dt, nowMs);
-    const fadeEdgeSoftness = 100;
-    const fadeLine = ((1 - state.searchFadeProgress) * (state.height + fadeEdgeSoftness)) - fadeEdgeSoftness;
-
-    for (let i = 0; i < state.dots.length; i += 1) {
-      const dot = state.dots[i];
-      const x = dot.anchorX;
-      const y = dot.anchorY;
-      let influence = 0;
-      for (let j = 0; j < state.influencers.length; j += 1) {
-        const influencer = state.influencers[j];
-        const dx = x - influencer.x;
-        const dy = y - influencer.y;
-        const dist = Math.hypot(dx, dy);
-        const local = Math.max(0, 1 - (dist / settings.influenceRadius));
-        if (local > influence) influence = local;
-      }
-      const influenceMix = Math.min(1, (influence * 0.9) + (dot.radiusNoise * 0.12));
-      const radius = settings.baseRadius + ((settings.maxRadius - settings.baseRadius) * influenceMix);
-      const r = Math.round(174 + ((224 - 174) * influenceMix));
-      const g = Math.round(174 + ((122 - 174) * influenceMix));
-      const b = Math.round(174 + ((16 - 174) * influenceMix));
-      let alpha = 0.24 + (0.14 * influenceMix);
-      if (state.searchFadeProgress > 0) {
-        const linearKeep = Math.max(0, Math.min(1, ((fadeLine - y) / fadeEdgeSoftness) + 0.5));
-        alpha *= linearKeep;
-      }
-      ctx.beginPath();
-      ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${alpha.toFixed(3)})`;
-      ctx.arc(x, y, radius, 0, Math.PI * 2);
-      ctx.fill();
-    }
-    requestDraw();
-  }
-
-  function requestDraw() {
-    if (!state.rafId) {
-      state.rafId = window.requestAnimationFrame((ts) => draw(ts));
-    }
-  }
-
-  function resizeCanvas() {
-    const rect = heroSection.getBoundingClientRect();
-    const nextWidth = Math.max(1, Math.floor(rect.width));
-    const nextHeight = Math.max(1, Math.floor(rect.height));
-    const nextDpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
-    state.width = nextWidth;
-    state.height = nextHeight;
-    state.dpr = nextDpr;
-    state.lastFrameMs = 0;
-
-    heroDotGrid.width = Math.floor(nextWidth * nextDpr);
-    heroDotGrid.height = Math.floor(nextHeight * nextDpr);
-    ctx.setTransform(nextDpr, 0, 0, nextDpr, 0, 0);
-    buildDots();
-    buildInfluencers();
-    requestDraw();
-  }
-
-  window.addEventListener('resize', resizeCanvas);
-
-  setHeroGridSearching = (isSearching) => {
-    const nextTarget = isSearching ? 1 : 0;
-    if (nextTarget !== state.searchFadeTarget) {
-      state.searchFadeFrom = state.searchFadeProgress;
-      state.searchFadeTarget = nextTarget;
-      state.searchFadeStartMs = performance.now();
-    }
-    requestDraw();
-  };
-
-  resizeCanvas();
+function closeReader() {
+  readerPanel.classList.remove("open");
+  readerPanel.setAttribute("aria-hidden", "true");
 }
 
-function escapeHtml(str) {
-  return String(str)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;');
+function articleMatchesQuery(article, qLower) {
+  if (!qLower) return true;
+  const bodyText = Array.isArray(article.body) ? article.body.join(" ") : "";
+  const hay = `${article.title} ${article.snippet} ${article.meta} ${bodyText}`.toLowerCase();
+  return hay.includes(qLower);
 }
 
-function editionTabMarkup(item) {
-  if (!item) return '';
-  return (
-    '<span class="edition-tab-inner">' +
-      '<span class="edition-tab-tag">' + escapeHtml(item.tag) + '</span>' +
-      '<span class="edition-tab-title">' + escapeHtml(item.title) + '</span>' +
-      '<span class="edition-tab-author">' + escapeHtml(item.author || 'By Eagle Eyelet Staff') + '</span>' +
-    '</span>'
-  );
-}
+function openReader(article) {
+  readerHero.src = article.image;
+  readerHero.alt = article.title;
+  readerTitle.textContent = article.title;
+  readerMeta.textContent = article.meta;
+  readerBody.innerHTML = "";
 
-function editionTabClassSuffix(item) {
-  if (!item || item.tag !== 'BOTC Game') return '';
-  return ' game-tab game-' + String(item.gameType || '').toLowerCase();
-}
-
-function buildMainEditionTabs() {
-  if (!editionTabsContainer) return;
-  editionTabsContainer.innerHTML = editionItems.map((item, index) =>
-    '<button class="edition-tab' + editionTabClassSuffix(item) + (index === 0 ? ' active' : '') + '" type="button" role="tab" data-idx="' + index + '" aria-selected="' + (index === 0 ? 'true' : 'false') + '"></button>'
-  ).join('');
-  editionTabs = Array.from(editionTabsContainer.querySelectorAll('.edition-tab'));
-}
-
-function syncEditionTabs() {
-  editionTabs.forEach((tab, i) => {
-    const item = editionItems[i];
-    tab.innerHTML = editionTabMarkup(item);
-    tab.className = 'edition-tab' + editionTabClassSuffix(item) + (tab.classList.contains('active') ? ' active' : '');
-    tab.setAttribute('aria-label', item ? item.tag + ': ' + item.title : '');
+  article.body.forEach((paragraph) => {
+    const p = document.createElement("p");
+    p.textContent = paragraph;
+    readerBody.appendChild(p);
   });
+
+  readerPanel.classList.add("open");
+  readerPanel.setAttribute("aria-hidden", "false");
 }
 
-function updateSearchState() {
-  const isSearching = Boolean(sinput.value.trim());
-  heroSection.classList.toggle('search-active', isSearching);
-  setHeroGridSearching(isSearching);
-}
+function renderEdition(editionId) {
+  const selected = editions.find((edition) => edition.id === editionId) || editions[0];
+  currentEdition = selected;
 
-function renderEdition(index) {
-  const current = editionItems[index];
-  editionTabs.forEach((tab, i) => {
-    tab.classList.toggle('active', i === index);
-    tab.setAttribute('aria-selected', i === index ? 'true' : 'false');
-    tab.setAttribute('tabindex', i === index ? '0' : '-1');
-  });
-  const paragraphs = Array.isArray(current.content) ? current.content : [current.content];
-  const isPoem = String(current.tag).toLowerCase() === 'poem';
-  const articleBody = paragraphs.map((line) => {
-    if (!line.trim()) {
-      return isPoem
-        ? '<div class="poem-stanza-break" aria-hidden="true"></div>'
-        : '<p class="edition-content-text">&nbsp;</p>';
-    }
-    return '<p class="edition-content-text">' + escapeHtml(line) + '</p>';
-  }).join('');
-  editionContent.innerHTML =
-    '<article class="edition-content-wrap' + (isPoem ? ' poem-layout' : '') + '">' +
-      '<p class="edition-content-meta">' + escapeHtml(current.tag) + '</p>' +
-      '<h2 class="edition-content-headline">' + escapeHtml(current.title) + '</h2>' +
-      '<p class="edition-content-author">' + escapeHtml(current.author || 'By Eagle Eyelet Staff') + '</p>' +
-      '<div class="edition-content-body">' + articleBody + '</div>' +
-    '</article>';
-}
-
-function renderEditionInPane(options) {
-  const items = options.items || [];
-  const tabs = options.tabs || [];
-  const contentPane = options.contentPane;
-  const activeIndex = options.activeIndex || 0;
-  tabs.forEach((tab, i) => {
-    tab.classList.toggle('active', i === activeIndex);
-    tab.setAttribute('aria-selected', i === activeIndex ? 'true' : 'false');
-    tab.setAttribute('tabindex', i === activeIndex ? '0' : '-1');
-  });
-  const current = items[activeIndex];
-  if (!current || !contentPane) return;
-  const paragraphs = Array.isArray(current.content) ? current.content : [current.content];
-  const isPoem = String(current.tag).toLowerCase() === 'poem';
-  const body = paragraphs.map((line) => {
-    if (!line.trim()) {
-      return isPoem
-        ? '<div class="poem-stanza-break" aria-hidden="true"></div>'
-        : '<p class="edition-content-text">&nbsp;</p>';
-    }
-    return '<p class="edition-content-text">' + escapeHtml(line) + '</p>';
-  }).join('');
-  contentPane.innerHTML =
-    '<article class="edition-content-wrap' + (isPoem ? ' poem-layout' : '') + '">' +
-      '<p class="edition-content-meta">' + escapeHtml(current.tag) + '</p>' +
-      '<h2 class="edition-content-headline">' + escapeHtml(current.title) + '</h2>' +
-      '<p class="edition-content-author">' + escapeHtml(current.author || 'By Eagle Eyelet Staff') + '</p>' +
-      '<div class="edition-content-body">' + body + '</div>' +
-    '</article>';
-}
-
-function setPastEditionsOpen(isOpen) {
-  if (!pastEditionsFab || !pastEditionsToggle) return;
-  pastEditionsFab.classList.toggle('open', isOpen);
-  pastEditionsToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-  syncPastEditionsFocus();
-}
-
-function renderPastEditionButtons() {
-  if (!pastEditionList) return;
-  pastEditionList.innerHTML = pastEditions.map((item, index) =>
-    '<button class="past-edition-btn' + (index === selectedPastEdition ? ' active' : '') + '" type="button" data-past-edition-index="' + index + '" aria-pressed="' + (index === selectedPastEdition ? 'true' : 'false') + '">' +
-      '<span class="past-edition-btn-main">' + escapeHtml(item.editionName) + '</span>' +
-      '<span class="past-edition-btn-date">' + escapeHtml(item.date) + '</span>' +
-    '</button>'
-  ).join('');
-}
-
-function renderPastEditionModalTabs(editionIndex) {
-  const edition = pastEditions[editionIndex];
-  if (!edition || !pastEditionTabs) return [];
-  pastEditionTabs.innerHTML = edition.items.map((item, itemIndex) =>
-    '<button class="edition-tab' + editionTabClassSuffix(item) + (((selectedPastItemByEdition[editionIndex] || 0) === itemIndex) ? ' active' : '') + '" type="button" role="tab" data-past-item-index="' + itemIndex + '" aria-selected="' + (((selectedPastItemByEdition[editionIndex] || 0) === itemIndex) ? 'true' : 'false') + '">' +
-      editionTabMarkup(item) +
-    '</button>'
-  ).join('');
-  return Array.from(pastEditionTabs.querySelectorAll('.edition-tab'));
-}
-
-function openPastEditionModal(editionIndex, itemIndex) {
-  const edition = pastEditions[editionIndex];
-  if (!edition || !pastEditionModal || !pastEditionContent) return;
-  selectedPastEdition = editionIndex;
-  const safeItemIndex = Number.isInteger(itemIndex) ? itemIndex : (selectedPastItemByEdition[editionIndex] || 0);
-  selectedPastItemByEdition[editionIndex] = Math.max(0, Math.min(edition.items.length - 1, safeItemIndex));
-  const modalTabs = renderPastEditionModalTabs(editionIndex);
-  if (pastEditionModalMeta) {
-    pastEditionModalMeta.textContent = edition.editionName + ' · ' + edition.date;
+  if (selected.id === latestEditionId) {
+    editionSwitchLabel.textContent = `Current Edition - ${selected.date}`;
+  } else {
+    editionSwitchLabel.textContent = `Viewing ${selected.number} - ${selected.date}`;
   }
-  renderEditionInPane({
-    items: edition.items,
-    tabs: modalTabs,
-    contentPane: pastEditionContent,
-    activeIndex: selectedPastItemByEdition[editionIndex]
-  });
-  pastEditionModal.classList.add('open');
-  pastEditionModal.setAttribute('aria-hidden', 'false');
-  setPastEditionsOpen(false);
-  renderPastEditionButtons();
-  syncPastEditionsFocus();
-}
 
-function closePastEditionModal() {
-  if (!pastEditionModal) return;
-  pastEditionModal.classList.remove('open');
-  pastEditionModal.setAttribute('aria-hidden', 'true');
-  syncPastEditionsFocus();
-}
+  const qLower = (searchInput && searchInput.value.trim().toLowerCase()) || "";
+  const articles = qLower
+    ? selected.articles.filter((article) => articleMatchesQuery(article, qLower))
+    : selected.articles;
 
-function syncPastEditionsFocus() {
-  const isChooserOpen = Boolean(pastEditionsFab && pastEditionsFab.classList.contains('open'));
-  const isModalOpen = Boolean(pastEditionModal && pastEditionModal.classList.contains('open'));
-  document.body.classList.toggle('past-editions-active', isChooserOpen || isModalOpen);
-}
-
-function navigateToSearchHit(hit) {
-  if (!hit) return;
-  if (hit.target === 'current' && Number.isInteger(hit.editionIndex)) {
-    renderEdition(hit.editionIndex);
-    if (contentSection) {
-      contentSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-    return;
-  }
-  if (hit.target === 'past' && Number.isInteger(hit.pastEditionIndex)) {
-    setPastEditionsOpen(true);
-    openPastEditionModal(hit.pastEditionIndex, hit.pastItemIndex);
-    if (pastEditionsFab) {
-      pastEditionsFab.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    }
-  }
-}
-
-buildMainEditionTabs();
-syncEditionTabs();
-renderEdition(0);
-renderPastEditionButtons();
-initHeroDotGrid();
-
-if (botcFloat) {
-  botcFloat.addEventListener('mouseenter', () => {
-    document.body.classList.add('leaderboard-hover');
-  });
-  botcFloat.addEventListener('mouseleave', () => {
-    document.body.classList.remove('leaderboard-hover');
-  });
-}
-
-editionTabs.forEach((tab, index) => {
-  tab.addEventListener('click', () => renderEdition(index));
-});
-
-if (pastEditionsToggle) {
-  pastEditionsToggle.addEventListener('click', () => {
-    const nextOpen = !pastEditionsFab.classList.contains('open');
-    setPastEditionsOpen(nextOpen);
-  });
-}
-
-if (pastEditionList) {
-  pastEditionList.addEventListener('click', (event) => {
-    const targetButton = event.target.closest('.past-edition-btn');
-    if (!targetButton) return;
-    const index = Number(targetButton.dataset.pastEditionIndex);
-    if (!Number.isInteger(index) || index < 0 || index >= pastEditions.length) return;
-    openPastEditionModal(index, 0);
-  });
-}
-
-if (pastEditionTabs) {
-  pastEditionTabs.addEventListener('click', (event) => {
-    const tabButton = event.target.closest('.edition-tab');
-    if (!tabButton) return;
-    const itemIndex = Number(tabButton.dataset.pastItemIndex);
-    const edition = pastEditions[selectedPastEdition];
-    if (!edition || !Number.isInteger(itemIndex) || itemIndex < 0 || itemIndex >= edition.items.length) return;
-    selectedPastItemByEdition[selectedPastEdition] = itemIndex;
-    const modalTabs = Array.from(pastEditionTabs.querySelectorAll('.edition-tab'));
-    renderEditionInPane({
-      items: edition.items,
-      tabs: modalTabs,
-      contentPane: pastEditionContent,
-      activeIndex: itemIndex
+  articleList.innerHTML = "";
+  if (!articles.length) {
+    const empty = document.createElement("li");
+    empty.className = "article-list-empty";
+    empty.textContent = qLower
+      ? "No articles match your search in this edition."
+      : "No articles in this edition.";
+    articleList.appendChild(empty);
+  } else {
+    articles.forEach((article) => {
+      const item = document.createElement("li");
+      item.className = "article";
+      item.setAttribute("tabindex", "0");
+      item.setAttribute("role", "button");
+      item.setAttribute("aria-label", `Open article: ${article.title}`);
+      item.innerHTML = `
+      <img class="article-thumb" src="${article.image}" alt="${article.title}">
+      <div class="article-copy">
+        <h3>${article.title}</h3>
+        <p>${article.snippet}</p>
+        <div class="article-meta">${article.meta}</div>
+      </div>
+    `;
+      item.addEventListener("click", () => openReader(article));
+      item.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          openReader(article);
+        }
+      });
+      articleList.appendChild(item);
     });
+  }
+
+  closeReader();
+}
+
+function populateEditionDropdown() {
+  editions.forEach((edition, index) => {
+    const option = document.createElement("option");
+    option.value = edition.id;
+    option.textContent = edition.label;
+    if (index === 0) {
+      option.selected = true;
+    }
+    editionSelect.appendChild(option);
   });
 }
 
-if (pastEditionModalOverlay) {
-  pastEditionModalOverlay.addEventListener('click', closePastEditionModal);
+populateEditionDropdown();
+renderEdition(editions[0].id);
+
+editionSelect.addEventListener("change", (event) => {
+  renderEdition(event.target.value);
+});
+
+if (searchInput) {
+  searchInput.addEventListener("input", () => {
+    renderEdition(editionSelect.value);
+  });
+  searchInput.addEventListener("keydown", (e) => {
+    if (e.key !== "Escape") return;
+    if (searchInput.value) {
+      searchInput.value = "";
+      renderEdition(editionSelect.value);
+    }
+    searchInput.blur();
+  });
 }
 
-if (pastEditionModalClose) {
-  pastEditionModalClose.addEventListener('click', closePastEditionModal);
+readerClose.addEventListener("click", closeReader);
+
+function openSubmitModal() {
+  submitOverlay.classList.add("open");
+  submitModal.classList.add("open");
+  submitModal.setAttribute("aria-hidden", "false");
 }
 
-sinput.addEventListener('input', () => {
-  const q = sinput.value.trim().toLowerCase();
-  if (!q) {
-    sresults.classList.remove('visible');
-    sresults.innerHTML = '';
-    currentSearchHits = [];
-    updateSearchState();
-    return;
+function closeSubmitModal() {
+  submitOverlay.classList.remove("open");
+  submitModal.classList.remove("open");
+  submitModal.setAttribute("aria-hidden", "true");
+}
+
+openSubmitModalBtn.addEventListener("click", openSubmitModal);
+closeSubmitModalBtn.addEventListener("click", closeSubmitModal);
+cancelSubmitModalBtn.addEventListener("click", closeSubmitModal);
+submitOverlay.addEventListener("click", () => {
+  if (gameLinkModal.classList.contains("open")) {
+    closeGameModal();
   }
-  const hits = searchData.filter(d =>
-    d.title.toLowerCase().includes(q) ||
-    d.tag.toLowerCase().includes(q) ||
-    String(d.author || '').toLowerCase().includes(q)
-  );
-  currentSearchHits = hits;
-  const itemMarkup = (m, index) =>
-    `<div class="sr-item" role="button" tabindex="0" data-hit-index="${index}">
-      <span class="sr-tag">${escapeHtml(m.tag)}</span>
-      <span class="sr-title-wrap">
-        <span class="sr-title">${escapeHtml(m.title)}</span>
-        ${m.author ? `<span class="sr-author">${escapeHtml(m.author)}</span>` : ''}
-      </span>
-    </div>`;
-  const linearResultsMarkup = hits.map(itemMarkup).join('<div class="sr-divider"></div>');
-  const gridResultsMarkup = hits.map(itemMarkup).join('');
-  sresults.innerHTML = hits.length
-    ? '<div class="sr-header">Results</div>' +
-      (hits.length >= 4
-        ? `<div class="sr-grid">${gridResultsMarkup}</div>`
-        : linearResultsMarkup)
-    : '<div class="sr-empty">No results found</div>';
-  sresults.classList.add('visible');
-  updateSearchState();
-});
-
-sresults.addEventListener('click', (event) => {
-  const resultItem = event.target.closest('.sr-item');
-  if (!resultItem) return;
-  const hitIndex = Number(resultItem.dataset.hitIndex);
-  if (!Number.isInteger(hitIndex) || hitIndex < 0) return;
-  const selectedHit = currentSearchHits[hitIndex];
-  if (!selectedHit) return;
-
-  navigateToSearchHit(selectedHit);
-
-  sresults.classList.remove('visible');
-  sinput.blur();
-  updateSearchState();
-});
-
-sresults.addEventListener('keydown', (event) => {
-  if (event.key !== 'Enter' && event.key !== ' ') return;
-  const resultItem = event.target.closest('.sr-item');
-  if (!resultItem) return;
-  event.preventDefault();
-  resultItem.click();
-});
-
-document.addEventListener('click', e => {
-  if (!e.target.closest('.search-outer')) {
-    sresults.classList.remove('visible');
-    updateSearchState();
-  }
-  if (pastEditionsFab && !e.target.closest('#past-editions-fab')) {
-    setPastEditionsOpen(false);
+  if (submitModal.classList.contains("open")) {
+    closeSubmitModal();
   }
 });
-sinput.addEventListener('focus', updateSearchState);
-sinput.addEventListener('blur', () => {
-  setTimeout(updateSearchState, 0);
+sendGmailBtn.addEventListener("click", () => {
+  const title = submitTitleInput.value.trim();
+  const images = submitImagesInput.value.trim();
+  const articleText = submitEditor.innerText.trim();
+
+  const subject = title || "Eagle Eye Submission";
+  const body = [
+    title ? `Title: ${title}` : "Title:",
+    images ? `Image URLs: ${images}` : "Image URLs:",
+    "",
+    "Article:",
+    articleText || "(Article content)"
+  ].join("\n");
+
+  const gmailComposeUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=mcaeagleeye@gmail.com&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  window.open(gmailComposeUrl, "_blank", "noopener,noreferrer");
 });
-sinput.addEventListener('keydown', e => {
-  if (e.key === 'Escape') {
-    sresults.classList.remove('visible');
-    sinput.blur();
-    updateSearchState();
-    closePastEditionModal();
+
+formatButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    submitEditor.focus();
+    const cmd = button.dataset.cmd;
+    const value = button.dataset.value || null;
+    document.execCommand(cmd, false, value);
+  });
+});
+
+function openGameModal(gameName, url) {
+  gameLinkTitle.textContent = `${gameName}`;
+  gameLoading.classList.remove("hidden");
+  gameLoadingText.textContent = "Loading game...";
+  if (gameLoadTimeout) {
+    clearTimeout(gameLoadTimeout);
+  }
+  gameFrame.src = url;
+  openGameLinkBtn.href = url;
+  submitOverlay.classList.add("open");
+  gameLinkModal.classList.add("open");
+  gameLinkModal.setAttribute("aria-hidden", "false");
+  gameLoadTimeout = setTimeout(() => {
+    gameLoadingText.textContent = "Still loading... you can also open in new tab.";
+  }, 4500);
+}
+
+function closeGameModal() {
+  if (gameLoadTimeout) {
+    clearTimeout(gameLoadTimeout);
+    gameLoadTimeout = null;
+  }
+  gameFrame.src = "about:blank";
+  gameLoading.classList.remove("hidden");
+  gameLoadingText.textContent = "Loading game...";
+  gameLinkModal.classList.remove("open");
+  gameLinkModal.setAttribute("aria-hidden", "true");
+  if (!submitModal.classList.contains("open")) {
+    submitOverlay.classList.remove("open");
+  }
+}
+
+gameLaunchLinks.forEach((link) => {
+  link.addEventListener("click", (event) => {
+    event.preventDefault();
+    const gameName = link.dataset.game || "Game";
+    const url = link.href;
+    openGameModal(gameName, url);
+  });
+});
+
+closeGameLinkModalBtn.addEventListener("click", closeGameModal);
+gameFrame.addEventListener("load", () => {
+  gameLoading.classList.add("hidden");
+  if (gameLoadTimeout) {
+    clearTimeout(gameLoadTimeout);
+    gameLoadTimeout = null;
+  }
+});
+
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && readerPanel.classList.contains("open")) {
+    closeReader();
+  }
+  if (event.key === "Escape" && submitModal.classList.contains("open")) {
+    closeSubmitModal();
+  }
+  if (event.key === "Escape" && gameLinkModal.classList.contains("open")) {
+    closeGameModal();
   }
 });
 </script>
