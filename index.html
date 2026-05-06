@@ -1053,11 +1053,14 @@ body {
 }
 
 @media (max-width: 980px) {
+  html,
   body {
     min-height: 100vh;
     height: auto;
     overflow-x: hidden;
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-y;
   }
 
   .botc-mini-strip {
@@ -1151,6 +1154,7 @@ body {
   .article-list {
     overflow: visible;
     padding: 0 0.9rem;
+    touch-action: pan-y;
   }
 
   .article-thumb {
